@@ -2,15 +2,25 @@ package hr.model;
 
 import java.io.Serializable;
 
-public class Company extends User<String> implements Serializable {
+public class Company implements Serializable {
+    private String idCompany;
     private String name;
     private String adress;
     private String describe;
 
-    public Company(String name, String adress, String describe) {
+    public Company(String idCompany, String name, String adress, String describe) {
+        this.idCompany = idCompany;
         this.name = name;
         this.adress = adress;
         this.describe = describe;
+    }
+
+    public String getIdCompany() {
+        return idCompany;
+    }
+
+    public void setIdCompany(String idCompany) {
+        this.idCompany = idCompany;
     }
 
     public String getName() {
