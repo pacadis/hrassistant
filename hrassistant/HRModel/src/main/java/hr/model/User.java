@@ -2,9 +2,18 @@ package hr.model;
 
 import java.io.Serializable;
 
-public class User implements Serializable {
+public class User<ID> implements Serializable {
+    private ID id;
     private String username;
     private String password;
+
+    public ID getId() {
+        return id;
+    }
+
+    public void setId(ID id) {
+        this.id = id;
+    }
 
     public String getUsername() {
         return username;
