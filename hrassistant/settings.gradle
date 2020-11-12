@@ -1,2 +1,6 @@
 rootProject.name = 'hrassistant'
+include 'HRModel'
+include 'HRPersistance'
+include 'HRServices'
+include 'HRServer'
 
