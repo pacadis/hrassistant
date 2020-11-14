@@ -64,7 +64,7 @@ public class CompanyRepository implements RepositoryInterface<String, Company> {
     }
 
     @Override
-    public Iterable<Company> findAll() {
+    public List<Company> findAll() {
         logger.traceEntry();
         List<Company> companies = RepositoryHibernate.getAll(Company.class);
         logger.traceExit(companies);

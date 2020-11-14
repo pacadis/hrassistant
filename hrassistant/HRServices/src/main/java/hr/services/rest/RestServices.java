@@ -1,9 +1,9 @@
 package hr.services.rest;
 
-import hr.model.User;
+import hr.model.Company;
+import hr.model.Employee;
 import hr.persistance.hibernate.CompanyRepository;
 import hr.persistance.hibernate.EmployeeRepository;
-import hr.persistance.hibernate.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,34 +15,67 @@ import java.util.List;
 @RequestMapping("")
 public class RestServices {
 
-    private final UserRepository userRepository = new UserRepository();
     private final EmployeeRepository employeeRepository = new EmployeeRepository();
     private final CompanyRepository companyRepository = new CompanyRepository();
 
-    @GetMapping("/user")
-    public ResponseEntity<?> getUsers() {
-        List<User> list = userRepository.findAll();
+    // EmployeeServices
+    @GetMapping("/employee")
+    public ResponseEntity<?> getEmployees() {
+        List<Employee> list = employeeRepository.findAll();
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<?> getUser(@PathVariable("userId") String userId) {
-        return new ResponseEntity<>(userRepository.findOne(userId), HttpStatus.OK);
+    @GetMapping("/employee/{employeeId}")
+    public ResponseEntity<?> getEmployee(@PathVariable("employeeId") String employeeId) {
+        return new ResponseEntity<>(employeeRepository.findOne(employeeId), HttpStatus.OK);
     }
 
-    @PostMapping("/user")
-    public void saveUser(@RequestBody User user) {
-        System.out.println(user);
-        user.setId("20");
+    @PostMapping("/employee")
+    public void saveEmployee(@RequestBody Employee employee) {
+        System.out.println(employee);
+        //generare id
+        //asdasd124542raczxc123
+        employee.setId("20");
     }
 
-    @PutMapping("/user/{userId}")
-    public void updateUser(@RequestBody User user, @PathVariable("userId") String userId) {
-        userRepository.update(userId, user);
+    @PutMapping("/employee/{employeeId}")
+    public void updateEmployee(@RequestBody Employee employee, @PathVariable("employeeId") String employeeId) {
+        employeeRepository.update(employeeId, employee);
     }
 
-    @DeleteMapping("/user/{userId}")
-    public void deleteUser(@PathVariable("userId") String userId) {
-        userRepository.delete(userId);
+    @DeleteMapping("/employee/{employeeId}")
+    public void deleteEmployee(@PathVariable("employeeId") String employeeId) {
+        employeeRepository.delete(employeeId);
+    }
+
+
+    // CompanyServices
+    @GetMapping("/company")
+    public ResponseEntity<?> getCompanys() {
+        List<Company> list = companyRepository.findAll();
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    @GetMapping("/company/{companyId}")
+    public ResponseEntity<?> getCompany(@PathVariable("companyId") String companyId) {
+        return new ResponseEntity<>(companyRepository.findOne(companyId), HttpStatus.OK);
+    }
+
+    @PostMapping("/company")
+    public void saveCompany(@RequestBody Company company) {
+        System.out.println(company);
+        //generare id
+        //asdasd124542raczxc123
+        company.setId("20");
+    }
+
+    @PutMapping("/company/{companyId}")
+    public void updateCompany(@RequestBody Company company, @PathVariable("companyId") String companyId) {
+        companyRepository.update(companyId, company);
+    }
+
+    @DeleteMapping("/company/{companyId}")
+    public void deleteCompany(@PathVariable("companyId") String companyId) {
+        companyRepository.delete(companyId);
     }
 }

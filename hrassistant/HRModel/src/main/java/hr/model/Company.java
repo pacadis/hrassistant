@@ -5,12 +5,12 @@ import java.io.Serializable;
 public class Company extends User<String> implements Serializable {
     private String name;
     private String adress;
-    private String describe;
+    private String description;
 
-    public Company(String name, String adress, String describe) {
+    public Company(String name, String adress, String description) {
         this.name = name;
         this.adress = adress;
-        this.describe = describe;
+        this.description = description;
     }
 
     public String getName() {
@@ -30,10 +30,10 @@ public class Company extends User<String> implements Serializable {
     }
 
     public String getDescribe() {
-        return describe;
+        return description;
     }
 
     public void setDescribe(String describe) {
-        this.describe = describe;
+        this.description = description;
     }
 }

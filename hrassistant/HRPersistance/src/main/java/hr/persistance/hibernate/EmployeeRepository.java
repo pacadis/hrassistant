@@ -64,7 +64,7 @@ public class EmployeeRepository implements RepositoryInterface<String, Employee>
     }
 
     @Override
-    public Iterable<Employee> findAll() {
+    public List<Employee> findAll() {
         logger.traceEntry();
         List<Employee> employees = RepositoryHibernate.getAll(Employee.class);
         logger.traceExit(employees);
