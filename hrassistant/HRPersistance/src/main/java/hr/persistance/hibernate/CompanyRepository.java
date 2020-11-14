@@ -1,73 +1,84 @@
 package hr.persistance.hibernate;
 
 import hr.model.Company;
-import hr.persistance.JDBCUtils;
-import hr.persistance.RepositoryInterface;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.Properties;
 
 public class CompanyRepository implements RepositoryInterface<String, Company> {
-    private static final Logger logger = LogManager.getLogger();
-    private JDBCUtils dbUtils;
-
-    public CompanyRepository(Properties props) {
-        logger.info("Initializing CompanyRepository with properties: {} ", props);
-        dbUtils = new JDBCUtils(props);
-    }
+    private final SessionFactory sessionFactory;
 
     public CompanyRepository() {
-
+        sessionFactory = new Configuration()
+                .configure()
+                .addAnnotatedClass(Company.class)
+                .buildSessionFactory();
     }
 
     @Override
-    public int size() {
-        logger.traceEntry();
-        logger.traceExit();
-        return RepositoryHibernate.getAll(Company.class).size();
+    public Company save(Company entity) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            if (findOne(entity.getId()) != null) {
+                session.close();
+                return findOne(entity.getId());
+            }
+            session.save(entity);
+            session.getTransaction().commit();
+            session.close();
+            return entity;
+        }
     }
 
     @Override
-    public void save(Company entity) {
-        logger.traceEntry("saving Company {}", entity);
-        RepositoryHibernate.add(Company.class, entity);
-        logger.traceExit();
-
+    public Company delete(Company entity) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.delete(entity);
+            session.getTransaction().commit();
+            session.close();
+            return entity;
+        }
     }
 
     @Override
-    public void delete(String string) {
-        logger.traceEntry("deleting Company with {}", string);
-        Optional<Company> optional = RepositoryHibernate.get(Company.class, string);
-        optional.ifPresent(User -> RepositoryHibernate.delete(Company.class, User));
-        logger.traceExit();
-
+    public Company update(Company entity) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.update(entity);
+            session.getTransaction().commit();
+            session.close();
+            return entity;
+        }
     }
 
     @Override
-    public void update(String string, Company entity) {
-        logger.traceEntry("updating Company with {}", string);
-        Optional<Company> optional = RepositoryHibernate.get(Company.class, string);
-        optional.ifPresent(company -> RepositoryHibernate.update(Company.class, company, entity));
-        logger.traceExit();
-    }
-
-    @Override
-    public Company findOne(String string) {
-        logger.traceEntry();
-        Optional<Company> optional = RepositoryHibernate.get(Company.class, string);
-        logger.traceExit();
-        return optional.orElse(null);
+    public Company findOne(String id) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            List<Company> result = session.createQuery("select a from Company a where id=:id")
+                    .setParameter("id", id)
+                    .list();
+            session.getTransaction().commit();
+            session.close();
+            if (result.size() > 0)
+                return result.get(0);
+            else
+                return null;
+        }
     }
 
     @Override
     public List<Company> findAll() {
-        logger.traceEntry();
-        List<Company> companies = RepositoryHibernate.getAll(Company.class);
-        logger.traceExit(companies);
-        return companies;
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            List result = session.createQuery("select a from Company a")
+                    .list();
+            session.getTransaction().commit();
+            session.close();
+            return (List<Company>) result;
+        }
     }
 }

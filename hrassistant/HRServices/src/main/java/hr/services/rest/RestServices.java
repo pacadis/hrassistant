@@ -36,16 +36,18 @@ public class RestServices {
         //generare id
         //asdasd124542raczxc123
         employee.setId("20");
+        employeeRepository.save(employee);
     }
 
     @PutMapping("/employee/{employeeId}")
     public void updateEmployee(@RequestBody Employee employee, @PathVariable("employeeId") String employeeId) {
-        employeeRepository.update(employeeId, employee);
+        employee.setId(employeeId);
+        employeeRepository.update(employee);
     }
 
     @DeleteMapping("/employee/{employeeId}")
     public void deleteEmployee(@PathVariable("employeeId") String employeeId) {
-        employeeRepository.delete(employeeId);
+        employeeRepository.delete(employeeRepository.findOne(employeeId));
     }
 
 
@@ -67,15 +69,17 @@ public class RestServices {
         //generare id
         //asdasd124542raczxc123
         company.setId("20");
+        companyRepository.save(company);
     }
 
     @PutMapping("/company/{companyId}")
     public void updateCompany(@RequestBody Company company, @PathVariable("companyId") String companyId) {
-        companyRepository.update(companyId, company);
+        company.setId(companyId);
+        companyRepository.update(company);
     }
 
     @DeleteMapping("/company/{companyId}")
     public void deleteCompany(@PathVariable("companyId") String companyId) {
-        companyRepository.delete(companyId);
+        companyRepository.delete(companyRepository.findOne(companyId));
     }
 }

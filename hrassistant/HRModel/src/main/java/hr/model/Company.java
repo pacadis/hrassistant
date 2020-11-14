@@ -29,11 +29,11 @@ public class Company extends User<String> implements Serializable {
         this.adress = adress;
     }
 
-    public String getDescribe() {
+    public String getDescription() {
         return description;
     }
 
-    public void setDescribe(String describe) {
+    public void setDescription(String description) {
         this.description = description;
     }
 }

@@ -1,73 +1,84 @@
 package hr.persistance.hibernate;
 
 import hr.model.Employee;
-import hr.persistance.JDBCUtils;
-import hr.persistance.RepositoryInterface;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.Properties;
 
 public class EmployeeRepository implements RepositoryInterface<String, Employee> {
-    private static final Logger logger = LogManager.getLogger();
-    private JDBCUtils dbUtils;
-
-    public EmployeeRepository(Properties props) {
-        logger.info("Initializing EmployeeRepository with properties: {} ", props);
-        dbUtils = new JDBCUtils(props);
-    }
+    private final SessionFactory sessionFactory;
 
     public EmployeeRepository() {
-
+        sessionFactory = new Configuration()
+                .configure("D:\\Facultate\\Anul III\\An 3 - Semestrul I\\Proiect Colectiv\\hrassistant\\hrassistant\\HRServer\\src\\main\\resources\\hibernate.cfg.xml")
+                .addAnnotatedClass(Employee.class)
+                .buildSessionFactory();
     }
 
     @Override
-    public int size() {
-        logger.traceEntry();
-        logger.traceExit();
-        return RepositoryHibernate.getAll(Employee.class).size();
+    public Employee save(Employee entity) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            if (findOne(entity.getId()) != null) {
+                session.close();
+                return findOne(entity.getId());
+            }
+            session.save(entity);
+            session.getTransaction().commit();
+            session.close();
+            return entity;
+        }
     }
 
     @Override
-    public void save(Employee entity) {
-        logger.traceEntry("saving Employee {}", entity);
-        RepositoryHibernate.add(Employee.class, entity);
-        logger.traceExit();
-
+    public Employee delete(Employee entity) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.delete(entity);
+            session.getTransaction().commit();
+            session.close();
+            return entity;
+        }
     }
 
     @Override
-    public void delete(String string) {
-        logger.traceEntry("deleting Employee with {}", string);
-        Optional<Employee> optional = RepositoryHibernate.get(Employee.class, string);
-        optional.ifPresent(User -> RepositoryHibernate.delete(Employee.class, User));
-        logger.traceExit();
-
+    public Employee update(Employee entity) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.update(entity);
+            session.getTransaction().commit();
+            session.close();
+            return entity;
+        }
     }
 
     @Override
-    public void update(String string, Employee entity) {
-        logger.traceEntry("updating Employee with {}", string);
-        Optional<Employee> optional = RepositoryHibernate.get(Employee.class, string);
-        optional.ifPresent(employee -> RepositoryHibernate.update(Employee.class, employee, entity));
-        logger.traceExit();
-    }
-
-    @Override
-    public Employee findOne(String string) {
-        logger.traceEntry();
-        Optional<Employee> optional = RepositoryHibernate.get(Employee.class, string);
-        logger.traceExit();
-        return optional.orElse(null);
+    public Employee findOne(String id) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            List<Employee> result = session.createQuery("select a from Employee a where id=:id")
+                    .setParameter("id", id)
+                    .list();
+            session.getTransaction().commit();
+            session.close();
+            if (result.size() > 0)
+                return result.get(0);
+            else
+                return null;
+        }
     }
 
     @Override
     public List<Employee> findAll() {
-        logger.traceEntry();
-        List<Employee> employees = RepositoryHibernate.getAll(Employee.class);
-        logger.traceExit(employees);
-        return employees;
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            List result = session.createQuery("select a from Employee a")
+                    .list();
+            session.getTransaction().commit();
+            session.close();
+            return (List<Employee>) result;
+        }
     }
 }
