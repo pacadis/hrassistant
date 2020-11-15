@@ -12,7 +12,7 @@ public class EmployeeRepository implements RepositoryInterface<String, Employee>
 
     public EmployeeRepository() {
         sessionFactory = new Configuration()
-                .configure("D:\\Facultate\\Anul III\\An 3 - Semestrul I\\Proiect Colectiv\\hrassistant\\hrassistant\\HRServer\\src\\main\\resources\\hibernate.cfg.xml")
+                .configure()
                 .addAnnotatedClass(Employee.class)
                 .buildSessionFactory();
     }
