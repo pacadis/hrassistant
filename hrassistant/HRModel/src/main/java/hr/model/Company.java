@@ -1,8 +1,6 @@
 package hr.model;
 
-import java.io.Serializable;
-
-public class Company extends User<String> implements Serializable {
+public class Company extends User<String> {
     private String name;
     private String adress;
     private String description;
@@ -11,6 +9,9 @@ public class Company extends User<String> implements Serializable {
         this.name = name;
         this.adress = adress;
         this.description = description;
+    }
+
+    public Company() {
     }
 
     public String getName() {

@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+    <class name="hr.model.Company" table="Company">
+        <id name="id" column="id"/>
+        <property name="username" column="username"/>
+        <property name="password" column="password"/>
+        <property name="name" column="name"/>
+        <property name="adress" column="adress"/>
+        <property name="description" column="description"/>
+    </class>
+
+</hibernate-mapping>
