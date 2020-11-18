@@ -3,4 +3,6 @@ include 'HRModel'
 include 'HRPersistance'
 include 'HRServices'
 include 'HRServer'
+include 'HRClientFX'
+include 'HRClientFX'
 

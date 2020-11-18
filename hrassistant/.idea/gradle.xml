@@ -9,6 +9,7 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/HRClientFX" />
             <option value="$PROJECT_DIR$/HRModel" />
             <option value="$PROJECT_DIR$/HRPersistance" />
             <option value="$PROJECT_DIR$/HRServer" />
