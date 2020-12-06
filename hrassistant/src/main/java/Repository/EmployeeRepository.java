@@ -19,10 +19,6 @@ public class EmployeeRepository implements RepositoryInterface<String, Employee>
     public Employee save(Employee entity) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            if (findOne(entity.getId()) != null) {
-                session.close();
-                return findOne(entity.getId());
-            }
             session.save(entity);
             session.getTransaction().commit();
             session.close();
@@ -53,11 +49,11 @@ public class EmployeeRepository implements RepositoryInterface<String, Employee>
     }
 
     @Override
-    public Employee findOne(String id) {
+    public Employee findOne(String username) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            List<Employee> result = session.createQuery("select a from Employee a where id=:id")
-                    .setParameter("id", id)
+            List<Employee> result = session.createQuery("select a from Employee a where username=:username")
+                    .setParameter("username", username)
                     .list();
             session.getTransaction().commit();
             session.close();

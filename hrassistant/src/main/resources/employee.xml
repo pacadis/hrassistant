@@ -6,13 +6,12 @@
 
 <hibernate-mapping>
 
-    <class name="hr.model.Company" table="Company">
+    <class name="Model.Employee" table="Employee">
         <id name="id" column="id"/>
         <property name="username" column="username"/>
         <property name="password" column="password"/>
-        <property name="name" column="name"/>
-        <property name="adress" column="adress"/>
-        <property name="description" column="description"/>
+        <property name="firstName" column="firstName"/>
+        <property name="lastName" column="lastName"/>
     </class>
 
 </hibernate-mapping>

@@ -1,20 +1,32 @@
 package Model;
 
 
-public interface User {
-    String id = null;
-    String username = null;
-    String password = null;
+public class User {
+    private String username;
+    private String password;
 
-    String getId();
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 
-    void setId(String id);
+    public User() {
+    }
 
-    String getUsername();
+    public String getUsername() {
+        return username;
+    }
 
-    void setUsername(String username);
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
-    String getPassword();
+    public String getPassword() {
+        return password;
+    }
 
-    void setPassword(String password);
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
 }

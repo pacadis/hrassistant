@@ -3,6 +3,7 @@ package Server;
 
 import Model.Company;
 import Model.Employee;
+import Model.User;
 import Repository.CompanyRepository;
 import Repository.EmployeeRepository;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,51 @@ public class RestServices {
 
     private final EmployeeRepository employeeRepository = new EmployeeRepository();
     private final CompanyRepository companyRepository = new CompanyRepository();
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody User user) {
+        String username = user.getUsername();
+        String password = user.getPassword();
+        Employee employee = employeeRepository.findOne(username);
+        Company company = companyRepository.findOne(username);
+        if (employee != null) {
+            if (employee.getPassword().equals(password))
+                return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        if (company != null) {
+            if (company.getPassword().equals(password))
+                return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody Company company) {
+        company.setId(company.getUsername() + company.getPassword());
+        Employee employee = employeeRepository.findOne(company.getUsername());
+        Company companyFind = companyRepository.findOne(company.getUsername());
+        if (companyFind == null && employee == null) {
+            companyRepository.save(company);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
+
+    @PostMapping("/createAccount")
+    public ResponseEntity<?> createAccount(@RequestBody Employee employee) {
+        employee.setId(employee.getUsername() + employee.getPassword());
+        System.out.println(employee.getUsername());
+        Employee employee1 = employeeRepository.findOne(employee.getUsername());
+        Company companyFind = companyRepository.findOne(employee.getUsername());
+        if (companyFind == null && employee1 == null) {
+            employeeRepository.save(employee);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
+
 
     // EmployeeServices
     @GetMapping("/employee")

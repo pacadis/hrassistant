@@ -1,6 +1,8 @@
 package Model;
 
-public class Company implements User {
+import java.io.Serializable;
+
+public class Company implements Serializable {
     private String id;
     private String username;
     private String password;
@@ -17,33 +19,31 @@ public class Company implements User {
     public Company() {
     }
 
-
-    @Override
     public String getId() {
         return id;
     }
 
-    @Override
+
     public void setId(String id) {
         this.id = id;
     }
 
-    @Override
+
     public String getUsername() {
         return username;
     }
 
-    @Override
+
     public void setUsername(String username) {
         this.username = username;
     }
 
-    @Override
+
     public String getPassword() {
         return password;
     }
 
-    @Override
+
     public void setPassword(String password) {
         this.password = password;
     }

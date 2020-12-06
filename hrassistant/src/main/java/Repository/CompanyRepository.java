@@ -18,10 +18,6 @@ public class CompanyRepository implements RepositoryInterface<String, Company> {
     public Company save(Company entity) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            if (findOne(entity.getId()) != null) {
-                session.close();
-                return findOne(entity.getId());
-            }
             session.save(entity);
             session.getTransaction().commit();
             session.close();
@@ -52,11 +48,11 @@ public class CompanyRepository implements RepositoryInterface<String, Company> {
     }
 
     @Override
-    public Company findOne(String id) {
+    public Company findOne(String username) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            List<Company> result = session.createQuery("select a from Company a where id=:id")
-                    .setParameter("id", id)
+            List<Company> result = session.createQuery("select a from Company a where username=:username")
+                    .setParameter("username", username)
                     .list();
             session.getTransaction().commit();
             session.close();
