@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+    <class name="Model.Request" table="Request">
+        <id name="id" column="id"/>
+        <property name="usernameEmployee" column="usernameEmployee"/>
+        <property name="usernameCompany" column="usernameCompany"/>
+        <property name="description" column="description"/>
+        <property name="requestStatus" column="status"/>
+        <property name="date" type="date" column="data"/>
+    </class>
+
+</hibernate-mapping>

@@ -10,6 +10,7 @@ package utils;
  *
  */
 
+import Model.Enums.RequestStatus;
 import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.function.*;
 import org.hibernate.type.StandardBasicTypes;

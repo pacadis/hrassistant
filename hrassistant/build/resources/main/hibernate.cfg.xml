@@ -20,6 +20,7 @@
 
         <mapping resource="employee.xml"/>
         <mapping resource="company.xml"/>
+        <mapping resource="request.xml"/>
 
     </session-factory>
 </hibernate-configuration>

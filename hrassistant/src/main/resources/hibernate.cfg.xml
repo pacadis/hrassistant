@@ -8,8 +8,7 @@
         <property name="dialect">utils.SQLiteDialect</property>
 
         <property name="connection.driver_class">org.sqlite.JDBC</property>
-        <property name="connection.url">jdbc:sqlite:C://Users//Dan//Documents//SQL Server Management
-            Studio//HRAssistant.db
+        <property name="connection.url">jdbc:sqlite:C://Users//Dan//Documents//SQL Server Management Studio//HRAssistant.db
         </property>
 
         <property name="hibernate.connection.username">root</property>
@@ -21,6 +20,7 @@
 
         <mapping resource="employee.xml"/>
         <mapping resource="company.xml"/>
+        <mapping resource="request.xml"/>
 
     </session-factory>
 </hibernate-configuration>
