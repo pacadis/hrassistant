@@ -1,11 +1,10 @@
 package Server;
 
 
-import Model.Company;
-import Model.Employee;
-import Model.Request;
-import Model.User;
+import Model.*;
+import Model.dtos.ContractDTO;
 import Model.dtos.EmployeeAccountDTO;
+import Model.dtos.PayslipDTO;
 import Model.dtos.RequestDTO;
 import Repository.CompanyRepository;
 import Repository.EmployeeRepository;
@@ -93,6 +92,32 @@ public class RestServices {
                     requestDTOList.add(requestDTO);
                 });
         return new ResponseEntity<>(requestDTOList, HttpStatus.OK);
+    }
+
+    @GetMapping("/viewContract/{employeeUsername}")
+    public ResponseEntity<?> getContract(@PathVariable("employeeUsername") String employeeUsername){
+        List<ContractDTO> contractDTOList = new ArrayList<>();
+//        requestRepository.findAll()
+//                .forEach(request -> {
+//                    Employee employee = employeeRepository.findOne(request.getUsernameEmployee());
+//                    RequestDTO requestDTO = new RequestDTO(employee.getFirstName(), employee.getLastName(),
+//                            request.getDescription(), request.getRequestStatus(), request.getDate());
+//                    requestDTOList.add(requestDTO);
+//                });
+        return new ResponseEntity<>(contractDTOList, HttpStatus.OK);
+    }
+
+    @GetMapping("/viewPayslip/{employeeUsername}")
+    public ResponseEntity<?> getPayslip(@PathVariable("employeeUsername") String employeeUsername){
+        List<PayslipDTO> payslipDTOList = new ArrayList<>();
+//        requestRepository.findAll()
+//                .forEach(request -> {
+//                    Employee employee = employeeRepository.findOne(request.getUsernameEmployee());
+//                    RequestDTO requestDTO = new RequestDTO(employee.getFirstName(), employee.getLastName(),
+//                            request.getDescription(), request.getRequestStatus(), request.getDate());
+//                    requestDTOList.add(requestDTO);
+//                });
+        return new ResponseEntity<>(payslipDTOList, HttpStatus.OK);
     }
 
     @PostMapping("/saveRequest")

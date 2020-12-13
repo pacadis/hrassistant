@@ -2,7 +2,7 @@ package Model.dtos;
 
 import java.util.Date;
 
-public class EmployeeContractDTO {
+public class ContractDTO {
     private String firstName;
     private String lastName;
     private float grossSalary;
@@ -12,7 +12,7 @@ public class EmployeeContractDTO {
     private String expriationDate;
     private String cnp;
 
-    public EmployeeContractDTO(String firstName, String lastName, float grossSalary, Date hireDate,
+    public ContractDTO(String firstName, String lastName, float grossSalary, Date hireDate,
                                String type, String duration, String expriationDate, String cnp) {
         this.firstName = firstName;
         this.lastName = lastName;

@@ -7,12 +7,22 @@ public class EmployeeLeave {
     private String type;
     private Date fromDate;
     private Date toDate;
+    private String proxyUsername;
 
-    public EmployeeLeave(String usernameEmployee, String type, Date fromDate, Date toDate) {
+    public EmployeeLeave(String usernameEmployee, String type, Date fromDate, Date toDate, String proxyUsername) {
         this.usernameEmployee = usernameEmployee;
         this.type = type;
         this.fromDate = fromDate;
         this.toDate = toDate;
+        this.proxyUsername = proxyUsername;
+    }
+
+    public String getProxyUsername() {
+        return proxyUsername;
+    }
+
+    public void setProxyUsername(String proxyUsername) {
+        this.proxyUsername = proxyUsername;
     }
 
     public String getUsernameEmployee() {

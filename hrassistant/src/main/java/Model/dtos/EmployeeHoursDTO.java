@@ -1,58 +1,39 @@
 package Model.dtos;
 
 public class EmployeeHoursDTO {
-    private String username;
-    private String firstName;
-    private String lastName;
-    private int workedHours;
-    private int overtimeHours;
+    private float workedHours;
+    private float requiredHours;
+    private float overtimeHours;
+    private float overtimeLeave;
 
-    public EmployeeHoursDTO(String username, String firstName, String lastName, int workedHours,
-                            int overtimeHours) {
-        this.username = username;
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public EmployeeHoursDTO(float workedHours, float requiredHours, float overtimeHours, float overtimeLeave) {
         this.workedHours = workedHours;
+        this.requiredHours = requiredHours;
         this.overtimeHours = overtimeHours;
+        this.overtimeLeave = overtimeLeave;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public int getWorkedHours() {
-        return workedHours;
-    }
-
-    public void setWorkedHours(int workedHours) {
+    public void setWorkedHours(float workedHours) {
         this.workedHours = workedHours;
     }
 
-    public int getOvertimeHours() {
-        return overtimeHours;
+    public float getRequiredHours() {
+        return requiredHours;
     }
 
-    public void setOvertimeHours(int overtimeHours) {
+    public void setRequiredHours(float requiredHours) {
+        this.requiredHours = requiredHours;
+    }
+
+    public void setOvertimeHours(float overtimeHours) {
         this.overtimeHours = overtimeHours;
+    }
+
+    public float getOvertimeLeave() {
+        return overtimeLeave;
+    }
+
+    public void setOvertimeLeave(float overtimeLeave) {
+        this.overtimeLeave = overtimeLeave;
     }
 }
