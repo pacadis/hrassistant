@@ -2,10 +2,10 @@ package Server;
 
 
 import Model.*;
-import Model.dtos.ContractDTO;
-import Model.dtos.EmployeeAccountDTO;
-import Model.dtos.PayslipDTO;
-import Model.dtos.RequestDTO;
+import Model.dtos.*;
+import Model.enums.EmployeeType;
+import Model.enums.HolidayType;
+import Model.enums.RequestStatus;
 import Repository.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +25,8 @@ public class RestServices {
     private final RequestRepository requestRepository = new RequestRepository();
     private final ContractRepository contractRepository = new ContractRepository();
     private final PayslipRepository payslipRepository = new PayslipRepository();
+    private final ClockingRepository clockingRepository = new ClockingRepository();
+    private final HolidayRepository holidayRepository = new HolidayRepository();
 
     // Service
     @PostMapping("/login")
@@ -53,17 +55,6 @@ public class RestServices {
         Company companyFind = companyRepository.findOne(company.getUsername());
         if (companyFind == null && employee == null) {
             companyRepository.save(company);
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-    }
-
-    @PostMapping("/createAccount")
-    public ResponseEntity<?> createAccount(@RequestBody Employee employee) {
-        employee.setId(employee.getUsername() + employee.getPassword());
-        Employee employee1 = employeeRepository.findOne(employee.getUsername());
-        if (employee.getCompany()!=employee1.getCompany() || employee1 == null) {
-            employeeRepository.save(employee);
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -112,7 +103,7 @@ public class RestServices {
     @GetMapping("/viewPayslip/{employeeUsername}/{year}/{month}")
     public ResponseEntity<?> getPayslip(@PathVariable("employeeUsername") String employeeUsername,
                                         @PathVariable("year") String year,
-                                        @PathVariable("month") String month ){
+                                        @PathVariable("month") String month){
         PayslipDTO payslipDTO = null;
         for (Payslip payslip : payslipRepository.findAll())
             if (payslip.getUsernameEmployee().equals(employeeUsername) && payslip.getYear().equals(year) && payslip.getMonth().equals(month)) {
@@ -124,13 +115,116 @@ public class RestServices {
         return new ResponseEntity<>(payslipDTO, HttpStatus.OK);
     }
 
+    @GetMapping("/viewClocking/{employeeUsername}/{year}/{month}")
+    public ResponseEntity<?> getClocking(@PathVariable("employeeUsername") String employeeUsername,
+                                        @PathVariable("year") String year,
+                                        @PathVariable("month") String month){
+        ClockingDTO clockingDTO = null;
+        for (Clocking clocking : clockingRepository.findAll())
+            if (clocking.getUsernameEmployee().equals(employeeUsername) && clocking.getYear().equals(year) && clocking.getMonth().equals(month)) {
+                clockingDTO = new ClockingDTO(clocking.getYear(), clocking.getMonth(), clocking.getWorkedHours(), clocking.getRequiredHours(),
+                        clocking.getOvertimeHours(), clocking.getOvertimeLeave());
+            }
+        if (clockingDTO == null)
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(clockingDTO, HttpStatus.OK);
+    }
+
+    @GetMapping("/viewHoliday/{employeeUsername}")
+    public ResponseEntity<?> getHoliday(@PathVariable("employeeUsername") String employeeUsername){
+        HolidayDTO holidayDTO = null;
+        for (Holiday holiday : holidayRepository.findAll())
+            if (holiday.getUsernameEmployee().equals(employeeUsername)) {
+                holidayDTO = new HolidayDTO(holiday.getType(), holiday.getFromDate(), holiday.getToDate(), holiday.getProxyUsername());
+            }
+        if (holidayDTO == null)
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(holidayDTO, HttpStatus.OK);
+    }
+
     @PostMapping("/saveRequest")
-    public ResponseEntity<?> saveRequest(@RequestBody Request request) {
+    public ResponseEntity<?> saveRequest(@RequestBody Request request, @RequestBody Holiday holiday) {
         request.setId(UUID.randomUUID().toString());
         requestRepository.save(request);
-        if (requestRepository.findOne(request.getId()) != null)
+        if (requestRepository.findOne(request.getId()) != null) {
+            holiday.setIdRequest(request.getId());
             return new ResponseEntity<>(HttpStatus.OK);
+        }
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
+
+    @PostMapping("/request/{idRequest}/{string}")
+    public ResponseEntity<?> processingRequest(@PathVariable("idRequest") String idRequest, @PathVariable("string") String string){
+        if (string.equals(RequestStatus.DECLINE.toString())) {
+            Request request = requestRepository.findOne(idRequest);
+            request.setRequestStatus(RequestStatus.DECLINE.toString());
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        if (string.equals(RequestStatus.ACCEPT.toString())) {
+            boolean ok = acceptRequest(idRequest);
+            if (ok == true)
+                return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        }
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
+
+    public boolean acceptRequest(String idRequest){
+        Request request = requestRepository.findOne(idRequest);
+        Holiday holiday = holidayRepository.findOneByIdRequest(idRequest);
+        Clocking clocking = clockingRepository.findOneByIdRequest(idRequest);
+        Contract contract = contractRepository.findOne(request.getUsernameEmployee());
+        if (holiday.getType().equals(HolidayType.Normal.toString())) {
+            if (holiday.getToDate().getDay() - holiday.getFromDate().getDay() <= holiday.getDaysOff()) {
+                holiday.setDaysOff(holiday.getToDate().getDay() - holiday.getFromDate().getDay());
+                request.setRequestStatus(RequestStatus.ACCEPT.toString());
+                return true;
+            }
+            else {
+                request.setRequestStatus(RequestStatus.DECLINE.toString());
+                return false;
+            }
+        }
+        if (holiday.getType().equals(HolidayType.BloodDonation.toString()) ||
+                holiday.getType().equals(HolidayType.Death.toString()) || holiday.getType().equals(HolidayType.Mariage.toString())) {
+            request.setRequestStatus(RequestStatus.ACCEPT.toString());
+            return true;
+        }
+        if (holiday.getType().equals(HolidayType.Overtime.toString())) {
+            if (contract.getType().equals(EmployeeType.FullTime.toString())) {
+                if (holiday.getToDate().getDay() - holiday.getFromDate().getDay() * 8<= clocking.getOvertimeHours()) {
+                    clocking.setOvertimeHours(clocking.getOvertimeHours() - holiday.getToDate().getDay() - holiday.getFromDate().getDay() * 8);
+                    request.setRequestStatus(RequestStatus.ACCEPT.toString());
+                    return true;
+                }
+                else {
+                    request.setRequestStatus(RequestStatus.DECLINE.toString());
+                    return false;
+                }
+            }
+            if (contract.getType().equals(EmployeeType.PartTime6.toString())) {
+                if (holiday.getToDate().getDay() - holiday.getFromDate().getDay() * 6<= clocking.getOvertimeHours()) {
+                    clocking.setOvertimeHours(clocking.getOvertimeHours() - holiday.getToDate().getDay() - holiday.getFromDate().getDay() * 4);
+                    request.setRequestStatus(RequestStatus.ACCEPT.toString());
+                    return true;
+                }
+                else {
+                    request.setRequestStatus(RequestStatus.DECLINE.toString());
+                    return false;
+                }
+            }
+            if (contract.getType().equals(EmployeeType.PartTime4.toString())) {
+                if (holiday.getToDate().getDay() - holiday.getFromDate().getDay() * 4<= clocking.getOvertimeHours()) {
+                    clocking.setOvertimeHours(clocking.getOvertimeHours() - holiday.getToDate().getDay() - holiday.getFromDate().getDay() * 4);
+                    request.setRequestStatus(RequestStatus.ACCEPT.toString());
+                    return true;
+                }
+                else {
+                    request.setRequestStatus(RequestStatus.DECLINE.toString());
+                    return false;
+                }
+            }
+        }
+        return false;
     }
 
     // EmployeeServices
@@ -146,22 +240,25 @@ public class RestServices {
     }
 
     @PostMapping("/employee")
-    public void saveEmployee(@RequestBody Employee employee) {
-        //generare id
-        //asdasd124542raczxc123
-        employee.setId("20");
-        employeeRepository.save(employee);
+    public ResponseEntity<?> saveEmployee(@RequestBody Employee employee) {
+        employee.setId(employee.getUsername() + employee.getPassword());
+        Employee employee1 = employeeRepository.findOne(employee.getUsername());
+        if (employee.getCompany() != employee1.getCompany() || employee1 == null) {
+            employeeRepository.save(employee);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
-    @PutMapping("/employee/{employeeId}")
-    public void updateEmployee(@RequestBody Employee employee, @PathVariable("employeeId") String employeeId) {
-        employee.setId(employeeId);
+    @PutMapping("/employee/{usernameEmployee}")
+    public void updateEmployee(@RequestBody Employee employee, @PathVariable("usernameEmployee") String usernameEmployee) {
+        employee.setId(usernameEmployee);
         employeeRepository.update(employee);
     }
 
-    @DeleteMapping("/employee/{employeeId}")
-    public void deleteEmployee(@PathVariable("employeeId") String employeeId) {
-        employeeRepository.delete(employeeRepository.findOne(employeeId));
+    @DeleteMapping("/employee/{usernameEmployee}")
+    public void deleteEmployee(@PathVariable("usernameEmployee") String usernameEmployee) {
+        employeeRepository.delete(employeeRepository.findOne(usernameEmployee));
     }
 
     // CompanyServices

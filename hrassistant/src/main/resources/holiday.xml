@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+    <class name="Model.Holiday" table="Holiday">
+        <id name="usernameEmployee" column="usernameEmployee"/>
+        <property name="idRequest" column="idRequest"/>
+        <property name="daysOff" column="daysOff"/>
+        <property name="type" column="type"/>
+        <property name="fromDate" type="date" column="fromDate"/>
+        <property name="toDate" type="date" column="toDate"/>
+        <property name="proxyUsername" column="proxyUsername"/>
+    </class>
+
+</hibernate-mapping>

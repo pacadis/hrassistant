@@ -10,230 +10,309 @@
     <collation id="3" parent="1" name="BINARY"/>
     <collation id="4" parent="1" name="NOCASE"/>
     <collation id="5" parent="1" name="RTRIM"/>
-    <table id="6" parent="2" name="Company"/>
-    <table id="7" parent="2" name="Contract"/>
-    <table id="8" parent="2" name="Employee"/>
-    <table id="9" parent="2" name="Payslip"/>
-    <table id="10" parent="2" name="Request"/>
-    <table id="11" parent="2" name="sqlite_master">
+    <table id="6" parent="2" name="Clocking"/>
+    <table id="7" parent="2" name="Company"/>
+    <table id="8" parent="2" name="Contract"/>
+    <table id="9" parent="2" name="Employee"/>
+    <table id="10" parent="2" name="Holiday"/>
+    <table id="11" parent="2" name="Payslip"/>
+    <table id="12" parent="2" name="Request"/>
+    <table id="13" parent="2" name="sqlite_master">
       <System>1</System>
     </table>
-    <column id="12" parent="6" name="id">
+    <column id="14" parent="6" name="usernameEmployee">
+      <Position>1</Position>
+      <DataType>varchar|0s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="15" parent="6" name="idRequest">
+      <Position>2</Position>
+      <DataType>varchar|0s</DataType>
+    </column>
+    <column id="16" parent="6" name="year">
+      <Position>3</Position>
+      <DataType>varchar|0s</DataType>
+    </column>
+    <column id="17" parent="6" name="month">
+      <Position>4</Position>
+      <DataType>varchar|0s</DataType>
+    </column>
+    <column id="18" parent="6" name="workedHours">
+      <Position>5</Position>
+      <DataType>float|0s</DataType>
+    </column>
+    <column id="19" parent="6" name="requiredHours">
+      <Position>6</Position>
+      <DataType>float|0s</DataType>
+    </column>
+    <column id="20" parent="6" name="overtimeHours">
+      <Position>7</Position>
+      <DataType>float|0s</DataType>
+      <DefaultExpression>0</DefaultExpression>
+    </column>
+    <column id="21" parent="6" name="overtimeLeave">
+      <Position>8</Position>
+      <DataType>float|0s</DataType>
+      <DefaultExpression>0</DefaultExpression>
+    </column>
+    <index id="22" parent="6" name="sqlite_autoindex_Clocking_1">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>usernameEmployee</ColNames>
+      <ColumnCollations></ColumnCollations>
+      <Unique>1</Unique>
+    </index>
+    <key id="23" parent="6">
+      <ColNames>usernameEmployee</ColNames>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>sqlite_autoindex_Clocking_1</UnderlyingIndexName>
+    </key>
+    <column id="24" parent="7" name="id">
       <Position>1</Position>
       <DataType>VARCHAR(50)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="13" parent="6" name="username">
+    <column id="25" parent="7" name="username">
       <Position>2</Position>
       <DataType>VARCHAR(50)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="14" parent="6" name="password">
+    <column id="26" parent="7" name="password">
       <Position>3</Position>
       <DataType>VARCHAR(50)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="15" parent="6" name="name">
+    <column id="27" parent="7" name="name">
       <Position>4</Position>
       <DataType>VARCHAR(50)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="16" parent="6" name="address">
+    <column id="28" parent="7" name="address">
       <Position>5</Position>
       <DataType>VARCHAR(100)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="17" parent="6" name="description">
+    <column id="29" parent="7" name="description">
       <Position>6</Position>
       <DataType>VARCHAR(500)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="18" parent="6" name="sqlite_autoindex_Company_1">
+    <index id="30" parent="7" name="sqlite_autoindex_Company_1">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <ColumnCollations></ColumnCollations>
       <Unique>1</Unique>
     </index>
-    <key id="19" parent="6">
+    <key id="31" parent="7">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>sqlite_autoindex_Company_1</UnderlyingIndexName>
     </key>
-    <key id="20" parent="6">
+    <key id="32" parent="7">
       <ColNames>id</ColNames>
       <UnderlyingIndexName>sqlite_autoindex_Company_1</UnderlyingIndexName>
     </key>
-    <column id="21" parent="7" name="usernameEmployee">
+    <column id="33" parent="8" name="usernameEmployee">
       <Position>1</Position>
       <DataType>varchar(50)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="22" parent="7" name="grossSalary">
+    <column id="34" parent="8" name="grossSalary">
       <Position>2</Position>
       <DataType>float|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="23" parent="7" name="hireDate">
+    <column id="35" parent="8" name="hireDate">
       <Position>3</Position>
       <DataType>date|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="24" parent="7" name="type">
+    <column id="36" parent="8" name="type">
       <Position>4</Position>
       <DataType>varchar(50)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="25" parent="7" name="duration">
+    <column id="37" parent="8" name="duration">
       <Position>5</Position>
       <DataType>varchar(50)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="26" parent="7" name="expirationDate">
+    <column id="38" parent="8" name="expirationDate">
       <Position>6</Position>
       <DataType>date|0s</DataType>
     </column>
-    <column id="27" parent="8" name="id">
+    <column id="39" parent="9" name="id">
       <Position>1</Position>
       <DataType>VARCHAR(50)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="28" parent="8" name="username">
+    <column id="40" parent="9" name="username">
       <Position>2</Position>
       <DataType>VARCHAR(50)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="29" parent="8" name="password">
+    <column id="41" parent="9" name="password">
       <Position>3</Position>
       <DataType>VARCHAR(50)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="30" parent="8" name="firstname">
+    <column id="42" parent="9" name="firstname">
       <Position>4</Position>
       <DataType>VARCHAR(50)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="31" parent="8" name="lastname">
+    <column id="43" parent="9" name="lastname">
       <Position>5</Position>
       <DataType>VARCHAR(50)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="32" parent="8" name="cnp">
+    <column id="44" parent="9" name="cnp">
       <Position>6</Position>
       <DataType>varchar(50)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="33" parent="8" name="company">
+    <column id="45" parent="9" name="company">
       <Position>7</Position>
       <DataType>varchar|0s</DataType>
     </column>
-    <index id="34" parent="8" name="sqlite_autoindex_Employee_1">
+    <index id="46" parent="9" name="sqlite_autoindex_Employee_1">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <ColumnCollations></ColumnCollations>
       <Unique>1</Unique>
     </index>
-    <key id="35" parent="8">
+    <key id="47" parent="9">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>sqlite_autoindex_Employee_1</UnderlyingIndexName>
     </key>
-    <key id="36" parent="8">
+    <key id="48" parent="9">
       <ColNames>id</ColNames>
       <UnderlyingIndexName>sqlite_autoindex_Employee_1</UnderlyingIndexName>
     </key>
-    <column id="37" parent="9" name="year">
+    <column id="49" parent="10" name="usernameEmployee">
       <Position>1</Position>
       <DataType>varchar(50)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="38" parent="9" name="month">
+    <column id="50" parent="10" name="idRequest">
+      <Position>2</Position>
+      <DataType>varchar(50)|0s</DataType>
+    </column>
+    <column id="51" parent="10" name="daysOff">
+      <Position>3</Position>
+      <DataType>int|0s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="52" parent="10" name="type">
+      <Position>4</Position>
+      <DataType>varchar(50)|0s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="53" parent="10" name="fromDate">
+      <Position>5</Position>
+      <DataType>date|0s</DataType>
+    </column>
+    <column id="54" parent="10" name="toDate">
+      <Position>6</Position>
+      <DataType>date|0s</DataType>
+    </column>
+    <column id="55" parent="10" name="proxyUsername">
+      <Position>7</Position>
+      <DataType>varchar(50)|0s</DataType>
+    </column>
+    <column id="56" parent="11" name="year">
+      <Position>1</Position>
+      <DataType>varchar(50)|0s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="57" parent="11" name="month">
       <Position>2</Position>
       <DataType>varchar(50)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="39" parent="9" name="brutSalary">
+    <column id="58" parent="11" name="brutSalary">
       <Position>3</Position>
       <DataType>float|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="40" parent="9" name="netSalary">
+    <column id="59" parent="11" name="netSalary">
       <Position>4</Position>
       <DataType>float|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="41" parent="9" name="realizedSalary">
+    <column id="60" parent="11" name="realizedSalary">
       <Position>5</Position>
       <DataType>float|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="42" parent="9" name="workedHours">
+    <column id="61" parent="11" name="workedHours">
       <Position>6</Position>
       <DataType>float|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="43" parent="9" name="requiredHours">
+    <column id="62" parent="11" name="requiredHours">
       <Position>7</Position>
       <DataType>float|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="44" parent="9" name="usernameEmployee">
+    <column id="63" parent="11" name="usernameEmployee">
       <Position>8</Position>
       <DataType>varchar(50)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="45" parent="10" name="id">
+    <column id="64" parent="12" name="id">
       <Position>1</Position>
       <DataType>varchar|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="46" parent="10" name="usernameEmployee">
+    <column id="65" parent="12" name="usernameEmployee">
       <Position>2</Position>
       <DataType>varchar|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="47" parent="10" name="description">
+    <column id="66" parent="12" name="description">
       <Position>3</Position>
       <DataType>varchar|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="48" parent="10" name="status">
+    <column id="67" parent="12" name="status">
       <Position>4</Position>
       <DataType>varchar|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="49" parent="10" name="data">
+    <column id="68" parent="12" name="data">
       <Position>5</Position>
       <DataType>date|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="50" parent="10" name="sqlite_autoindex_Request_1">
+    <index id="69" parent="12" name="sqlite_autoindex_Request_1">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <ColumnCollations></ColumnCollations>
       <Unique>1</Unique>
     </index>
-    <key id="51" parent="10" name="Request_pk">
+    <key id="70" parent="12" name="Request_pk">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>sqlite_autoindex_Request_1</UnderlyingIndexName>
     </key>
-    <column id="52" parent="11" name="type">
+    <column id="71" parent="13" name="type">
       <Position>1</Position>
       <DataType>text|0s</DataType>
     </column>
-    <column id="53" parent="11" name="name">
+    <column id="72" parent="13" name="name">
       <Position>2</Position>
       <DataType>text|0s</DataType>
     </column>
-    <column id="54" parent="11" name="tbl_name">
+    <column id="73" parent="13" name="tbl_name">
       <Position>3</Position>
       <DataType>text|0s</DataType>
     </column>
-    <column id="55" parent="11" name="rootpage">
+    <column id="74" parent="13" name="rootpage">
       <Position>4</Position>
       <DataType>int|0s</DataType>
     </column>
-    <column id="56" parent="11" name="sql">
+    <column id="75" parent="13" name="sql">
       <Position>5</Position>
       <DataType>text|0s</DataType>
     </column>
