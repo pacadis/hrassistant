@@ -63,8 +63,7 @@ public class RestServices {
     public ResponseEntity<?> createAccount(@RequestBody Employee employee) {
         employee.setId(employee.getUsername() + employee.getPassword());
         Employee employee1 = employeeRepository.findOne(employee.getUsername());
-        Company companyFind = companyRepository.findOne(employee.getUsername());
-        if (companyFind == null && employee1 == null) {
+        if (employee.getCompany()!=employee1.getCompany() || employee1 == null) {
             employeeRepository.save(employee);
             return new ResponseEntity<>(HttpStatus.OK);
         }

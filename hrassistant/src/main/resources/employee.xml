@@ -8,10 +8,12 @@
 
     <class name="Model.Employee" table="Employee">
         <id name="id" column="id"/>
+        <property name="company" column="company"/>
         <property name="username" column="username"/>
         <property name="password" column="password"/>
         <property name="firstName" column="firstName"/>
         <property name="lastName" column="lastName"/>
+        <property name="cnp" column="cnp"/>
     </class>
 
 </hibernate-mapping>

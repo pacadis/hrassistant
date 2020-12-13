@@ -2,20 +2,38 @@ package Model;
 
 public class Employee {
     private String id;
+    private String company;
     private String username;
     private String password;
     private String firstName;
     private String lastName;
+    private String cnp;
 
-    public Employee(String firstName, String lastName) {
+    public Employee(String firstName, String lastName, String cnp) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.cnp = cnp;
     }
 
     public Employee() {
 
     }
 
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
+    }
+
+    public String getCnp() {
+        return cnp;
+    }
+
+    public void setCnp(String cnp) {
+        this.cnp = cnp;
+    }
 
     public String getId() {
         return id;

@@ -5,14 +5,12 @@ import java.util.Date;
 public class Request {
     private String id;
     private String usernameEmployee;
-    private String usernameCompany;
     private String description;
     private String requestStatus;
     private Date date;
 
-    public Request(String usernameEmployee, String usernameCompany, String description, String requestStatus, Date date) {
+    public Request(String usernameEmployee, String description, String requestStatus, Date date) {
         this.usernameEmployee = usernameEmployee;
-        this.usernameCompany = usernameCompany;
         this.description = description;
         this.requestStatus = requestStatus;
         this.date = date;
@@ -35,14 +33,6 @@ public class Request {
 
     public void setUsernameEmployee(String usernameEmployee) {
         this.usernameEmployee = usernameEmployee;
-    }
-
-    public String getUsernameCompany() {
-        return usernameCompany;
-    }
-
-    public void setUsernameCompany(String usernameCompany) {
-        this.usernameCompany = usernameCompany;
     }
 
     public String getDescription() {
