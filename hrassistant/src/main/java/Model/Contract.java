@@ -20,6 +20,10 @@ public class Contract {
         this.expirationDate = expirationDate;
     }
 
+    public Contract() {
+
+    }
+
     public String getUsernameEmployee() {
         return usernameEmployee;
     }

@@ -6,11 +6,11 @@ public class PayslipDTO {
     private float brutSalary;
     private float netSalary;
     private float realizedSalary;
-    private int workedHours;
-    private int requiredHours;
+    private float workedHours;
+    private float requiredHours;
 
     public PayslipDTO(String year, String month, float brutSalary,
-                   float netSalary, float realizedSalary, int workedHours, int requiredHours) {
+                   float netSalary, float realizedSalary, float workedHours, float requiredHours) {
         this.year = year;
         this.month = month;
         this.brutSalary = brutSalary;
@@ -60,19 +60,19 @@ public class PayslipDTO {
         this.realizedSalary = realizedSalary;
     }
 
-    public int getWorkedHours() {
+    public float getWorkedHours() {
         return workedHours;
     }
 
-    public void setWorkedHours(int workedHours) {
+    public void setWorkedHours(float workedHours) {
         this.workedHours = workedHours;
     }
 
-    public int getRequiredHours() {
+    public float getRequiredHours() {
         return requiredHours;
     }
 
-    public void setRequiredHours(int requiredHours) {
+    public void setRequiredHours(float requiredHours) {
         this.requiredHours = requiredHours;
     }
 }

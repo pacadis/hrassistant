@@ -6,9 +6,7 @@ import Model.dtos.ContractDTO;
 import Model.dtos.EmployeeAccountDTO;
 import Model.dtos.PayslipDTO;
 import Model.dtos.RequestDTO;
-import Repository.CompanyRepository;
-import Repository.EmployeeRepository;
-import Repository.RequestRepository;
+import Repository.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +23,8 @@ public class RestServices {
     private final EmployeeRepository employeeRepository = new EmployeeRepository();
     private final CompanyRepository companyRepository = new CompanyRepository();
     private final RequestRepository requestRepository = new RequestRepository();
+    private final ContractRepository contractRepository = new ContractRepository();
+    private final PayslipRepository payslipRepository = new PayslipRepository();
 
     // Service
     @PostMapping("/login")
@@ -96,28 +96,32 @@ public class RestServices {
 
     @GetMapping("/viewContract/{employeeUsername}")
     public ResponseEntity<?> getContract(@PathVariable("employeeUsername") String employeeUsername){
-        List<ContractDTO> contractDTOList = new ArrayList<>();
-//        requestRepository.findAll()
-//                .forEach(request -> {
-//                    Employee employee = employeeRepository.findOne(request.getUsernameEmployee());
-//                    RequestDTO requestDTO = new RequestDTO(employee.getFirstName(), employee.getLastName(),
-//                            request.getDescription(), request.getRequestStatus(), request.getDate());
-//                    requestDTOList.add(requestDTO);
-//                });
-        return new ResponseEntity<>(contractDTOList, HttpStatus.OK);
+        ContractDTO contractDTO = null;
+        for (Contract contract : contractRepository.findAll())
+            if (contract.getUsernameEmployee().equals(employeeUsername)) {
+                Employee employee = employeeRepository.findOne(contract.getUsernameEmployee());
+                contractDTO = new ContractDTO(employee.getFirstName(), employee.getLastName(),
+                        contract.getGrossSalary(), contract.getHireDate(), contract.getType(),
+                        contract.getDuration(), contract.getExpirationDate(), employee.getCnp());
+            }
+        if (contractDTO == null)
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(contractDTO, HttpStatus.OK);
     }
 
-    @GetMapping("/viewPayslip/{employeeUsername}")
-    public ResponseEntity<?> getPayslip(@PathVariable("employeeUsername") String employeeUsername){
-        List<PayslipDTO> payslipDTOList = new ArrayList<>();
-//        requestRepository.findAll()
-//                .forEach(request -> {
-//                    Employee employee = employeeRepository.findOne(request.getUsernameEmployee());
-//                    RequestDTO requestDTO = new RequestDTO(employee.getFirstName(), employee.getLastName(),
-//                            request.getDescription(), request.getRequestStatus(), request.getDate());
-//                    requestDTOList.add(requestDTO);
-//                });
-        return new ResponseEntity<>(payslipDTOList, HttpStatus.OK);
+    @GetMapping("/viewPayslip/{employeeUsername}/{year}/{month}")
+    public ResponseEntity<?> getPayslip(@PathVariable("employeeUsername") String employeeUsername,
+                                        @PathVariable("year") String year,
+                                        @PathVariable("month") String month ){
+        PayslipDTO payslipDTO = null;
+        for (Payslip payslip : payslipRepository.findAll())
+            if (payslip.getUsernameEmployee().equals(employeeUsername) && payslip.getYear().equals(year) && payslip.getMonth().equals(month)) {
+                payslipDTO = new PayslipDTO(payslip.getYear(), payslip.getMonth(), payslip.getBrutSalary(), payslip.getNetSalary(),
+                        payslip.getRealizedSalary(), payslip.getWorkedHours(), payslip.getRequiredHours());
+            }
+        if (payslipDTO == null)
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(payslipDTO, HttpStatus.OK);
     }
 
     @PostMapping("/saveRequest")

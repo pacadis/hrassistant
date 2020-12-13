@@ -7,8 +7,8 @@ public class Payslip {
     private float brutSalary;
     private float netSalary;
     private float realizedSalary;
-    private int workedHours;
-    private int requiredHours;
+    private float workedHours;
+    private float requiredHours;
 
     public Payslip(String usernameEmployee, String year, String month, float brutSalary,
                    float netSalary, float realizedSalary, int workedHours, int requiredHours) {
@@ -20,6 +20,9 @@ public class Payslip {
         this.realizedSalary = realizedSalary;
         this.workedHours = workedHours;
         this.requiredHours = requiredHours;
+    }
+
+    public Payslip() {
     }
 
     public String getUsernameEmployee() {
@@ -70,19 +73,19 @@ public class Payslip {
         this.realizedSalary = realizedSalary;
     }
 
-    public int getWorkedHours() {
+    public float getWorkedHours() {
         return workedHours;
     }
 
-    public void setWorkedHours(int workedHours) {
+    public void setWorkedHours(float workedHours) {
         this.workedHours = workedHours;
     }
 
-    public int getRequiredHours() {
+    public float getRequiredHours() {
         return requiredHours;
     }
 
-    public void setRequiredHours(int requiredHours) {
+    public void setRequiredHours(float requiredHours) {
         this.requiredHours = requiredHours;
     }
 }
