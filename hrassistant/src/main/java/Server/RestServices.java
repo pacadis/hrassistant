@@ -37,12 +37,12 @@ public class RestServices {
         Company company = companyRepository.findOne(username);
         if (employee != null) {
             if (employee.getPassword().equals(password))
-                return new ResponseEntity<>(new ResponseDTO("employee"), HttpStatus.OK);
+                return new ResponseEntity<>(new ResponseDTO("employee", employee.getFirstName()), HttpStatus.OK);
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         if (company != null) {
             if (company.getPassword().equals(password))
-                return new ResponseEntity<>(new ResponseDTO("employee"), HttpStatus.OK);
+                return new ResponseEntity<>(new ResponseDTO("company", company.getName()), HttpStatus.OK);
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
