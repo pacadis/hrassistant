@@ -241,6 +241,8 @@ public class RestServices {
 
     @PostMapping("/employee")
     public ResponseEntity<?> saveEmployee(@RequestBody Employee employee) {
+        if (employee.getCnp().length()!=13)
+            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         employee.setId(employee.getUsername() + employee.getPassword());
         Employee employee1 = employeeRepository.findOne(employee.getUsername());
         if (employee.getCompany() != employee1.getCompany() || employee1 == null) {
