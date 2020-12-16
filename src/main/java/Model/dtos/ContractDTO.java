@@ -9,18 +9,18 @@ public class ContractDTO {
     private Date hireDate;
     private String type;
     private String duration;
-    private String expriationDate;
+    private String expirationDate;
     private String cnp;
 
     public ContractDTO(String firstName, String lastName, float grossSalary, Date hireDate,
-                               String type, String duration, String expriationDate, String cnp) {
+                       String type, String duration, String expirationDate, String cnp) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.grossSalary = grossSalary;
         this.hireDate = hireDate;
         this.type = type;
         this.duration = duration;
-        this.expriationDate = expriationDate;
+        this.expirationDate = expirationDate;
         this.cnp = cnp;
     }
 
@@ -72,12 +72,12 @@ public class ContractDTO {
         this.duration = duration;
     }
 
-    public String getExpriationDate() {
-        return expriationDate;
+    public String getExpirationDate() {
+        return expirationDate;
     }
 
-    public void setExpriationDate(String expriationDate) {
-        this.expriationDate = expriationDate;
+    public void setExpirationDate(String expirationDate) {
+        this.expirationDate = expirationDate;
     }
 
     public String getCnp() {

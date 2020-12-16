@@ -88,6 +88,7 @@ public class RestServices {
     @GetMapping("/viewContract/{employeeUsername}")
     public ResponseEntity<?> getContract(@PathVariable("employeeUsername") String employeeUsername){
         ContractDTO contractDTO = null;
+
         for (Contract contract : contractRepository.findAll())
             if (contract.getUsernameEmployee().equals(employeeUsername)) {
                 Employee employee = employeeRepository.findOne(contract.getUsernameEmployee());
@@ -241,11 +242,12 @@ public class RestServices {
 
     @PostMapping("/employee")
     public ResponseEntity<?> saveEmployee(@RequestBody Employee employee) {
+        employee.setId(employee.getUsername() + employee.getPassword());
+        System.out.println(employee.toString());
         if (employee.getCnp().length()!=13)
             return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
-        employee.setId(employee.getUsername() + employee.getPassword());
         Employee employee1 = employeeRepository.findOne(employee.getUsername());
-        if (employee.getCompany() != employee1.getCompany() || employee1 == null) {
+        if (employee1 == null || employee.getCompany() != employee1.getCompany()) {
             employeeRepository.save(employee);
             return new ResponseEntity<>(HttpStatus.OK);
         }

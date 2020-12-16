@@ -9,10 +9,10 @@
     <class name="Model.Contract" table="Contract">
         <id name="usernameEmployee" column="usernameEmployee"/>
         <property name="grossSalary" column="grossSalary"/>
-        <property name="hireDate" column="hireDate"/>
+        <property name="hireDate" type="date" column="hireDate"/>
         <property name="type" column="type"/>
         <property name="duration" column="duration"/>
-        <property name="expirationDate" column="expirationDate"/>
+        <property name="expirationDate" type="date" column="expirationDate"/>
     </class>
 
 </hibernate-mapping>
