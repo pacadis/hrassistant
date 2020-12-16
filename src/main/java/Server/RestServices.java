@@ -102,6 +102,23 @@ public class RestServices {
         return new ResponseEntity<>(contractDTO, HttpStatus.OK);
     }
 
+    @GetMapping("/viewContracts/{companyUsername}")
+    public ResponseEntity<?> getAllContracts(@PathVariable("companyUsername") String companyUsername){
+        List<ContractDTO> contractDTOList = new ArrayList<>();
+        for (Contract contract : contractRepository.findAll()) {
+            Employee employee = employeeRepository.findOne(contract.getUsernameEmployee());
+            if (employee!=null && employee.getCompany().equals(companyUsername)) {
+                ContractDTO contractDTO = new ContractDTO(employee.getFirstName(), employee.getLastName(),
+                        contract.getGrossSalary(), contract.getHireDate(), contract.getType(),
+                        contract.getDuration(), contract.getExpirationDate(), employee.getCnp());
+                contractDTOList.add(contractDTO);
+            }
+        }
+        if (contractDTOList.size() > 0)
+            return new ResponseEntity<>(contractDTOList, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
+
     @GetMapping("/viewPayslip/{employeeUsername}/{year}/{month}")
     public ResponseEntity<?> getPayslip(@PathVariable("employeeUsername") String employeeUsername,
                                         @PathVariable("year") String year,
@@ -288,24 +305,5 @@ public class RestServices {
     @GetMapping("/company/{companyId}")
     public ResponseEntity<?> getCompany(@PathVariable("companyId") String companyId) {
         return new ResponseEntity<>(companyRepository.findOne(companyId), HttpStatus.OK);
-    }
-
-    @PostMapping("/company")
-    public void saveCompany(@RequestBody Company company) {
-        //generare id
-        //asdasd124542raczxc123
-        company.setId("20");
-        companyRepository.save(company);
-    }
-
-    @PutMapping("/company/{companyId}")
-    public void updateCompany(@RequestBody Company company, @PathVariable("companyId") String companyId) {
-        company.setId(companyId);
-        companyRepository.update(company);
-    }
-
-    @DeleteMapping("/company/{companyId}")
-    public void deleteCompany(@PathVariable("companyId") String companyId) {
-        companyRepository.delete(companyRepository.findOne(companyId));
     }
 }
