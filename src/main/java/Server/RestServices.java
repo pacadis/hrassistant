@@ -259,8 +259,13 @@ public class RestServices {
     }
 
     @DeleteMapping("/employee/{usernameEmployee}")
-    public void deleteEmployee(@PathVariable("usernameEmployee") String usernameEmployee) {
-        employeeRepository.delete(employeeRepository.findOne(usernameEmployee));
+    public ResponseEntity<?> deleteEmployee(@PathVariable("usernameEmployee") String usernameEmployee) {
+        Employee employee = employeeRepository.findOne(usernameEmployee);
+        if (employee!=null) {
+            employeeRepository.delete(employee);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
     // CompanyServices
