@@ -27,6 +27,7 @@ public class RestServices {
     private final PayslipRepository payslipRepository = new PayslipRepository();
     private final ClockingRepository clockingRepository = new ClockingRepository();
     private final HolidayRepository holidayRepository = new HolidayRepository();
+    private final ContactRepository contactRepository = new ContactRepository();
 
     // Service
     @PostMapping("/login")
@@ -226,6 +227,13 @@ public class RestServices {
             }
         }
         return false;
+    }
+
+    @PostMapping("/contact")
+    public ResponseEntity<?> saveContact(@RequestBody Contact contact) {
+        contactRepository.save(contact);
+        return new ResponseEntity<>(HttpStatus.OK);
+        //return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
     // EmployeeServices

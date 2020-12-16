@@ -24,6 +24,7 @@
         <mapping resource="payslip.xml"/>
         <mapping resource="clocking.xml"/>
         <mapping resource="holiday.xml"/>
+        <mapping resource="contact.xml"/>
 
     </session-factory>
 </hibernate-configuration>
