@@ -3,14 +3,16 @@ package Model.dtos;
 public class ClockingDTO {
     private String year;
     private String month;
+    private String day;
     private float workedHours;
     private float requiredHours;
     private float overtimeHours;
     private float overtimeLeave;
 
-    public ClockingDTO(String year, String month, float workedHours, float requiredHours, float overtimeHours, float overtimeLeave) {
+    public ClockingDTO(String year, String month, String day, float workedHours, float requiredHours, float overtimeHours, float overtimeLeave) {
         this.year = year;
         this.month = month;
+        this.day = day;
         this.workedHours = workedHours;
         this.requiredHours = requiredHours;
         this.overtimeHours = overtimeHours;
@@ -27,6 +29,14 @@ public class ClockingDTO {
 
     public String getMonth() {
         return month;
+    }
+
+    public String getDay() {
+        return day;
+    }
+
+    public void setDay(String day) {
+        this.day = day;
     }
 
     public void setMonth(String month) {

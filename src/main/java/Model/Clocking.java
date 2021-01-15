@@ -5,17 +5,19 @@ public class Clocking {
     private String idRequest;
     private String year;
     private String month;
+    private String day;
     private float workedHours;
     private float requiredHours;
     private float overtimeHours;
     private float overtimeLeave;
 
     public Clocking(String usernameEmployee, String year, String month,
-                    float workedHours, float requiredHours, float overtimeHours,
+                    String day, float workedHours, float requiredHours, float overtimeHours,
                     float overtimeLeave) {
         this.usernameEmployee = usernameEmployee;
         this.year = year;
         this.month = month;
+        this.day = day;
         this.workedHours = workedHours;
         this.requiredHours = requiredHours;
         this.overtimeHours = overtimeHours;
@@ -52,6 +54,14 @@ public class Clocking {
 
     public String getMonth() {
         return month;
+    }
+
+    public String getDay() {
+        return day;
+    }
+
+    public void setDay(String day) {
+        this.day = day;
     }
 
     public void setMonth(String month) {

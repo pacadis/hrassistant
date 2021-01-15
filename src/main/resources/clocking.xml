@@ -11,6 +11,7 @@
         <property name="idRequest" column="idRequest"/>
         <property name="year" column="year"/>
         <property name="month" column="month"/>
+        <property name="day" column="day"/>
         <property name="workedHours" column="workedHours"/>
         <property name="requiredHours" column="requiredHours"/>
         <property name="overtimeHours" column="overtimeHours"/>

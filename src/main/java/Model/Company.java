@@ -8,12 +8,10 @@ public class Company implements Serializable {
     private String password;
     private String name;
     private String address;
-    private String description;
 
-    public Company(String name, String address, String description) {
+    public Company(String name, String address) {
         this.name = name;
         this.address = address;
-        this.description = description;
     }
 
     public Company() {
@@ -62,13 +60,5 @@ public class Company implements Serializable {
 
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 }

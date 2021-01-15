@@ -6,6 +6,8 @@ import Model.dtos.*;
 import Model.enums.EmployeeType;
 import Model.enums.HolidayType;
 import Model.enums.RequestStatus;
+import Model.validator.ValidationException;
+import Model.validator.Validator;
 import Repository.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,7 @@ import java.util.UUID;
 @RequestMapping("/hr")
 public class RestServices {
 
+    private final Validator validator = new Validator();
     private final EmployeeRepository employeeRepository = new EmployeeRepository();
     private final CompanyRepository companyRepository = new CompanyRepository();
     private final RequestRepository requestRepository = new RequestRepository();
@@ -52,6 +55,11 @@ public class RestServices {
     @PostMapping("/register")
     public ResponseEntity<?> registerCompany(@RequestBody Company company) {
         company.setId(company.getUsername() + company.getPassword());
+        try {
+            validator.validateCompany(company);
+        } catch (ValidationException exception) {
+            return new ResponseEntity<>(exception.getMessage(), HttpStatus.EXPECTATION_FAILED);
+        }
         Employee employee = employeeRepository.findOne(company.getUsername());
         Company companyFind = companyRepository.findOne(company.getUsername());
         if (companyFind == null && employee == null) {
@@ -61,14 +69,16 @@ public class RestServices {
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
-    @GetMapping("/employeeAccounts")
-    public ResponseEntity<?> getAllEmployeeAccount(){
+    @GetMapping("/employeeAccounts/{companyUsername}")
+    public ResponseEntity<?> getAllEmployeeAccount(@PathVariable("companyUsername") String companyUsername){
         List<EmployeeAccountDTO> employeeAccountDTOList = new ArrayList<>();
         employeeRepository.findAll()
                 .forEach(employee -> {
-                    EmployeeAccountDTO employeeAccountDTO =
-                            new EmployeeAccountDTO(employee.getUsername(), employee.getFirstName(), employee.getLastName());
-                    employeeAccountDTOList.add(employeeAccountDTO);
+                    if (employee.getCompany().equals(companyUsername)) {
+                        EmployeeAccountDTO employeeAccountDTO =
+                                new EmployeeAccountDTO(employee.getUsername(), employee.getFirstName(), employee.getLastName());
+                        employeeAccountDTOList.add(employeeAccountDTO);
+                    }
                 });
         return new ResponseEntity<>(employeeAccountDTOList, HttpStatus.OK);
     }
@@ -141,7 +151,7 @@ public class RestServices {
         ClockingDTO clockingDTO = null;
         for (Clocking clocking : clockingRepository.findAll())
             if (clocking.getUsernameEmployee().equals(employeeUsername) && clocking.getYear().equals(year) && clocking.getMonth().equals(month)) {
-                clockingDTO = new ClockingDTO(clocking.getYear(), clocking.getMonth(), clocking.getWorkedHours(), clocking.getRequiredHours(),
+                clockingDTO = new ClockingDTO(clocking.getYear(), clocking.getMonth(), clocking.getDay(), clocking.getWorkedHours(), clocking.getRequiredHours(),
                         clocking.getOvertimeHours(), clocking.getOvertimeLeave());
             }
         if (clockingDTO == null)
@@ -167,6 +177,7 @@ public class RestServices {
         requestRepository.save(request);
         if (requestRepository.findOne(request.getId()) != null) {
             holiday.setIdRequest(request.getId());
+            holidayRepository.update(holiday);
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -248,9 +259,13 @@ public class RestServices {
 
     @PostMapping("/contact")
     public ResponseEntity<?> saveContact(@RequestBody Contact contact) {
+        try{
+            validator.validateContact(contact);
+        } catch (ValidationException exception) {
+            return new ResponseEntity<>(exception.getMessage(), HttpStatus.EXPECTATION_FAILED);
+        }
         contactRepository.save(contact);
         return new ResponseEntity<>(HttpStatus.OK);
-        //return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
     // EmployeeServices
@@ -262,17 +277,23 @@ public class RestServices {
 
     @GetMapping("/employee/{employeeId}")
     public ResponseEntity<?> getEmployee(@PathVariable("employeeId") String employeeId) {
-        return new ResponseEntity<>(employeeRepository.findOne(employeeId), HttpStatus.OK);
+        Employee employee = employeeRepository.findOne(employeeId);
+        if (employee != null)
+            return new ResponseEntity<>(employee, HttpStatus.OK);
+        else
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
     @PostMapping("/employee")
     public ResponseEntity<?> saveEmployee(@RequestBody Employee employee) {
         employee.setId(employee.getUsername() + employee.getPassword());
-        System.out.println(employee.toString());
-        if (employee.getCnp().length()!=13)
-            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+        try {
+            validator.validateEmployee(employee);
+        } catch (ValidationException exception) {
+            return new ResponseEntity<>(exception.getMessage(), HttpStatus.EXPECTATION_FAILED);
+        }
         Employee employee1 = employeeRepository.findOne(employee.getUsername());
-        if (employee1 == null || employee.getCompany() != employee1.getCompany()) {
+        if (employee1 == null) {
             employeeRepository.save(employee);
             return new ResponseEntity<>(HttpStatus.OK);
         }

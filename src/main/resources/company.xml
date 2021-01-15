@@ -12,7 +12,6 @@
         <property name="password" column="password"/>
         <property name="name" column="name"/>
         <property name="address" column="address"/>
-        <property name="description" column="description"/>
     </class>
 
 </hibernate-mapping>
