@@ -299,9 +299,22 @@ public class RestServices {
     }
 
     @PutMapping("/employee/{usernameEmployee}")
-    public void updateEmployee(@RequestBody Employee employee, @RequestBody Contract contract, @PathVariable("usernameEmployee") String usernameEmployee) {
+    public ResponseEntity<?> updateEmployee(@RequestBody Employee employee, @RequestBody Contract contract, @PathVariable("usernameEmployee") String usernameEmployee) {
         employee.setId(usernameEmployee);
+        contract.setUsernameEmployee(usernameEmployee);
+        try {
+            validator.validateEmployee(employee);
+        }catch (ValidationException exception) {
+            return new ResponseEntity<>(exception.getMessage(), HttpStatus.EXPECTATION_FAILED);
+        }
+        try {
+            validator.validateContract(contract);
+        }catch (ValidationException exception) {
+            return new ResponseEntity<>(exception.getMessage(), HttpStatus.EXPECTATION_FAILED);
+        }
         employeeRepository.update(employee);
+        contractRepository.update(contract);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/employee/{usernameEmployee}")

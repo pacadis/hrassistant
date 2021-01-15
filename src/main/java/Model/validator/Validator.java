@@ -1,9 +1,6 @@
 package Model.validator;
 
-import Model.Company;
-import Model.Contact;
-import Model.Employee;
-import Model.User;
+import Model.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -64,6 +61,31 @@ public class Validator {
         }
         if (contact.getMessage() == null || contact.getMessage().equals("")) {
             message += "Mesajul nu poate fi gol.\n";
+        }
+        if (!message.equals("")) {
+            throw new ValidationException(message);
+        }
+    }
+
+    public void validateContract(Contract contract) {
+        String message="";
+        if (contract.getUsernameEmployee() == null || contract.getUsernameEmployee().equals("")) {
+            message += "Numele de utilizator nu poate fi vid.\n";
+        }
+        if (contract.getType() == null || contract.getType().equals("")) {
+            message += "Tipul nu poate fi vid.\n";
+        }
+        if (contract.getDuration() == null || contract.getDuration().equals("")) {
+            message += "Durata nu poate fi vida.\n";
+        }
+        if (contract.getHireDate() == null || contract.getHireDate().equals("")) {
+            message += "Data de angajare nu poate fi vida.\n";
+        }
+        if (contract.getExpirationDate() == null || contract.getExpirationDate().equals("")) {
+            message += "Data expirare nu poate fi vida.\n";
+        }
+        if (contract.getExpirationDate().after(contract.getHireDate())) {
+            message += "Data de angajare trebuie sa fie dupa date de expirare.\n";
         }
         if (!message.equals("")) {
             throw new ValidationException(message);

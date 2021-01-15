@@ -8,10 +8,10 @@ public class Contract {
     private Date hireDate;
     private String type;
     private String duration;
-    private String expirationDate;
+    private Date expirationDate;
 
     public Contract(String usernameEmployee, float grossSalary, Date hireDate, String type,
-                    String duration, String expirationDate) {
+                    String duration, Date expirationDate) {
         this.usernameEmployee = usernameEmployee;
         this.grossSalary = grossSalary;
         this.hireDate = hireDate;
@@ -64,11 +64,11 @@ public class Contract {
         this.duration = duration;
     }
 
-    public String getExpirationDate() {
+    public Date getExpirationDate() {
         return expirationDate;
     }
 
-    public void setExpirationDate(String expirationDate) {
+    public void setExpirationDate(Date expirationDate) {
         this.expirationDate = expirationDate;
     }
 }
