@@ -129,34 +129,32 @@ public class RestServices {
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
-    @GetMapping("/viewPayslip/{employeeUsername}/{year}/{month}")
-    public ResponseEntity<?> getPayslip(@PathVariable("employeeUsername") String employeeUsername,
-                                        @PathVariable("year") String year,
-                                        @PathVariable("month") String month){
-        PayslipDTO payslipDTO = null;
+    @GetMapping("/viewPayslip/{employeeUsername}")
+    public ResponseEntity<?> getPayslip(@PathVariable("employeeUsername") String employeeUsername){
+        List<PayslipDTO> payslipDTOList = new ArrayList<>();
         for (Payslip payslip : payslipRepository.findAll())
-            if (payslip.getUsernameEmployee().equals(employeeUsername) && payslip.getYear().equals(year) && payslip.getMonth().equals(month)) {
-                payslipDTO = new PayslipDTO(payslip.getYear(), payslip.getMonth(), payslip.getBrutSalary(), payslip.getNetSalary(),
+            if (payslip.getUsernameEmployee().equals(employeeUsername)) {
+                PayslipDTO payslipDTO = new PayslipDTO(payslip.getYear(), payslip.getMonth(), payslip.getBrutSalary(), payslip.getNetSalary(),
                         payslip.getRealizedSalary(), payslip.getWorkedHours(), payslip.getRequiredHours());
+                payslipDTOList.add(payslipDTO);
             }
-        if (payslipDTO == null)
+        if (payslipDTOList.size() == 0)
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        return new ResponseEntity<>(payslipDTO, HttpStatus.OK);
+        return new ResponseEntity<>(payslipDTOList, HttpStatus.OK);
     }
 
-    @GetMapping("/viewClocking/{employeeUsername}/{year}/{month}")
-    public ResponseEntity<?> getClocking(@PathVariable("employeeUsername") String employeeUsername,
-                                        @PathVariable("year") String year,
-                                        @PathVariable("month") String month){
-        ClockingDTO clockingDTO = null;
+    @GetMapping("/viewClocking/{employeeUsername}")
+    public ResponseEntity<?> getClocking(@PathVariable("employeeUsername") String employeeUsername){
+        List<ClockingDTO> clockingDTOList = new ArrayList<>();
         for (Clocking clocking : clockingRepository.findAll())
-            if (clocking.getUsernameEmployee().equals(employeeUsername) && clocking.getYear().equals(year) && clocking.getMonth().equals(month)) {
-                clockingDTO = new ClockingDTO(clocking.getYear(), clocking.getMonth(), clocking.getDay(), clocking.getWorkedHours(), clocking.getRequiredHours(),
+            if (clocking.getUsernameEmployee().equals(employeeUsername)) {
+                ClockingDTO clockingDTO = new ClockingDTO(clocking.getYear(), clocking.getMonth(), clocking.getDay(), clocking.getWorkedHours(), clocking.getRequiredHours(),
                         clocking.getOvertimeHours(), clocking.getOvertimeLeave());
+                clockingDTOList.add(clockingDTO);
             }
-        if (clockingDTO == null)
+        if (clockingDTOList.size() == 0)
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        return new ResponseEntity<>(clockingDTO, HttpStatus.OK);
+        return new ResponseEntity<>(clockingDTOList, HttpStatus.OK);
     }
 
     @GetMapping("/viewHoliday/{employeeUsername}")
@@ -301,7 +299,7 @@ public class RestServices {
     }
 
     @PutMapping("/employee/{usernameEmployee}")
-    public void updateEmployee(@RequestBody Employee employee, @PathVariable("usernameEmployee") String usernameEmployee) {
+    public void updateEmployee(@RequestBody Employee employee, @RequestBody Contract contract, @PathVariable("usernameEmployee") String usernameEmployee) {
         employee.setId(usernameEmployee);
         employeeRepository.update(employee);
     }
