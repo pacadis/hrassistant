@@ -76,6 +76,10 @@ public class Validator{
         if (contract.getType() == null || contract.getType().equals("")) {
             message += "Tipul nu poate fi vid.\n";
         }
+        if (!contract.getType().equals("FullTime") && !contract.getType().equals("PartTime6")
+                && !contract.getType().equals("PartTime4")) {
+            message += "Tipul trebuie sa fie FullTime, PartTime6 sau PartTime4.\n";
+        }
         if (contract.getDuration() == null || contract.getDuration().equals("")) {
             message += "Durata nu poate fi vida.\n";
         }
