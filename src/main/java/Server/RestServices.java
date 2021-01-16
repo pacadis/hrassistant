@@ -291,7 +291,7 @@ public class RestServices {
     }
 
     @GetMapping("/employee/{usernameEmployee}")
-    public ResponseEntity<?> getEmployeeContract(@PathVariable("employeeId") String usernameEmployee) {
+    public ResponseEntity<?> getEmployeeContract(@PathVariable("usernameEmployee") String usernameEmployee) {
         Employee employee = employeeRepository.findOne(usernameEmployee);
         Contract contract = contractRepository.findOne(usernameEmployee);
         EditEmployeeDTO editEmployeeDTO;
