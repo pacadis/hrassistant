@@ -189,6 +189,21 @@ public class RestServices {
     @PostMapping("/saveRequest")
     public ResponseEntity<?> saveRequest(@RequestBody SaveRequestDTO saveRequestDTO) {
         String uniqueID = UUID.randomUUID().toString();
+        if (saveRequestDTO.getType().equals("Concediu")) {
+            saveRequestDTO.setType("Normal");
+        }
+        if (saveRequestDTO.getType().equals("Concediu pentru donare de sange")) {
+            saveRequestDTO.setType("BloodDonation");
+        }
+        if (saveRequestDTO.getType().equals("Concediu pentru inmormantare")) {
+            saveRequestDTO.setType("Death");
+        }
+        if (saveRequestDTO.getType().equals("Concediu pentru casatorie")) {
+            saveRequestDTO.setType("Mariage");
+        }
+        if (saveRequestDTO.getType().equals("Concediu din ore suplimentare")) {
+            saveRequestDTO.setType("Overtime");
+        }
         Request request = new Request(saveRequestDTO.getUsernameEmployee(), saveRequestDTO.getDescription(), saveRequestDTO.getRequestStatus(),
                 saveRequestDTO.getDate());
         request.setId(uniqueID);
