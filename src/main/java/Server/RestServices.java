@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -289,11 +290,22 @@ public class RestServices {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-    @GetMapping("/employee/{employeeId}")
-    public ResponseEntity<?> getEmployee(@PathVariable("employeeId") String employeeId) {
-        Employee employee = employeeRepository.findOne(employeeId);
-        if (employee != null)
-            return new ResponseEntity<>(employee, HttpStatus.OK);
+    @GetMapping("/employee/{usernameEmployee}")
+    public ResponseEntity<?> getEmployeeContract(@PathVariable("employeeId") String usernameEmployee) {
+        Employee employee = employeeRepository.findOne(usernameEmployee);
+        Contract contract = contractRepository.findOne(usernameEmployee);
+        EditEmployeeDTO editEmployeeDTO;
+        if (employee != null) {
+            if (contract != null)
+                editEmployeeDTO = new EditEmployeeDTO(employee.getUsername(), employee.getPassword(),
+                        employee.getFirstName(), employee.getLastName(), employee.getCnp(), contract.getGrossSalary(),
+                        contract.getHireDate(), contract.getType(), contract.getDuration(), contract.getExpirationDate());
+            else
+                editEmployeeDTO = new EditEmployeeDTO(employee.getUsername(), employee.getPassword(),
+                        employee.getFirstName(), employee.getLastName(), employee.getCnp(), 0,
+                        new Date(), "", "", new Date());
+            return new ResponseEntity<>(editEmployeeDTO, HttpStatus.OK);
+        }
         else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
