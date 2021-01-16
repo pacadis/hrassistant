@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @CrossOrigin
 @RestController
@@ -186,15 +187,33 @@ public class RestServices {
     }
 
     @PostMapping("/saveRequest")
-    public ResponseEntity<?> saveRequest(@RequestBody Request request, @RequestBody Holiday holiday) {
-        request.setId(UUID.randomUUID().toString());
-        requestRepository.save(request);
-        if (requestRepository.findOne(request.getId()) != null) {
-            holiday.setIdRequest(request.getId());
-            holidayRepository.update(holiday);
-            return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<?> saveRequest(@RequestBody SaveRequestDTO saveRequestDTO) {
+        String uniqueID = UUID.randomUUID().toString();
+        Request request = new Request(saveRequestDTO.getUsernameEmployee(), saveRequestDTO.getDescription(), saveRequestDTO.getRequestStatus(),
+                saveRequestDTO.getDate());
+        request.setId(uniqueID);
+        try{
+            validator.validateRequest(request);
         }
-        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+       catch (ValidationException e) {
+           return new ResponseEntity<>(e.getMessage(), HttpStatus.EXPECTATION_FAILED);
+        }
+        requestRepository.save(request);
+        //int daysOff = (int) ((int)saveRequestDTO.getToDate().getTime() - saveRequestDTO.getFromDate().getTime());
+        int days = (int) ((int)saveRequestDTO.getToDate().getTime() - saveRequestDTO.getFromDate().getTime());
+        long daysOff = TimeUnit.MILLISECONDS.toDays(days);
+        Holiday holiday = new Holiday(saveRequestDTO.getUsernameEmployee(), (int) daysOff,saveRequestDTO.getType(),
+                saveRequestDTO.getFromDate(),saveRequestDTO.getToDate(), saveRequestDTO.getProxyName());
+        holiday.setIdRequest(request.getId());
+        try{
+            validator.validateHoliday(holiday);
+        }
+        catch (ValidationException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.EXPECTATION_FAILED);
+        }
+        holidayRepository.save(holiday);
+        return new ResponseEntity<>(HttpStatus.OK);
+
     }
 
     @PostMapping("/request/{idRequest}/{string}")

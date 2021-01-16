@@ -96,4 +96,51 @@ public class Validator{
             throw new ValidationException(message);
         }
     }
+
+    public void validateRequest(Request request) throws ValidationException {
+        String message="";
+        if (request.getUsernameEmployee() == null || request.getUsernameEmployee().equals("")) {
+            message += "Numele de utilizator nu poate fi vid.\n";
+        }
+        if (request.getDescription() == null || request.getDescription().equals("")) {
+            message += "Descrierea nu poate fi vida.\n";
+        }
+        if (!request.getRequestStatus().equals("ACCEPT") && !request.getRequestStatus().equals("DECLINE")
+                && !request.getRequestStatus().equals("PENDING")) {
+            message += "Statusul trebuie sa fie ACCEPT sau DECLINE sau PENDING.\n";
+        }
+        if (request.getDate() == null ) {
+            message += "Data nu poate fi vida.\n";
+        }
+        if (!message.equals("")) {
+            throw new ValidationException(message);
+        }
+    }
+    public void validateHoliday(Holiday holiday) throws ValidationException {
+        String message="";
+        if (holiday.getUsernameEmployee() == null || holiday.getUsernameEmployee().equals("")) {
+            message += "Numele de utilizator nu poate fi vid.\n";
+        }
+        if (holiday.getDaysOff()< 0 ) {
+            message += "Zilele libere nu pot fi negative.\n";
+        }
+        if (!holiday.getType().equals("Normal") && !holiday.getType().equals("BloodDonation")
+                && !holiday.getType().equals("Death") &&  !holiday.getType().equals("Mariage")
+            &&  !holiday.getType().equals("Overtime")) {
+            message += "Tipul trebuie sa fie Normal sau BloodDonation sau Death sau Mariage sau Overtime.\n";
+        }
+        if (holiday.getFromDate() == null ) {
+            message += "Data de inceput nu poate fi vida.\n";
+        }
+        if (holiday.getToDate() == null ) {
+            message += "Data de sfarsit nu poate fi vida.\n";
+        }
+        if (!holiday.getToDate().after(holiday.getFromDate())) {
+            message += "Data de sfarsit nu poate fi inainte de date de inceput.\n";
+        }
+
+        if (!message.equals("")) {
+            throw new ValidationException(message);
+        }
+    }
 }
