@@ -8,7 +8,7 @@
         <property name="dialect">utils.SQLiteDialect</property>
 
         <property name="connection.driver_class">org.sqlite.JDBC</property>
-        <property name="connection.url">jdbc:sqlite:D:/Facultate/Anul III/An 3 - Semestrul I/Proiect Colectiv/hrassistant/HRAssistant.db</property>
+        <property name="connection.url">jdbc:sqlite:C:/Users/Razvan/Desktop/Facultate/Anul_3/PPD programare paralela si distribuita/hrassistant/HRAssistant.db</property>
 
         <property name="hibernate.connection.username">root</property>
         <property name="hibernate.connection.password">root</property>
@@ -16,6 +16,7 @@
         <property name="hibernate.current_session_context_class">thread</property>
         <property name="hibernate.show_sql">true</property>
         <property name="hibernate.hbm2ddl.auto">update</property>
+        <property name="connection.pool_size">100</property>
 
         <mapping resource="employee.xml"/>
         <mapping resource="company.xml"/>

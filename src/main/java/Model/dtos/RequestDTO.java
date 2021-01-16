@@ -3,18 +3,28 @@ package Model.dtos;
 import java.util.Date;
 
 public class RequestDTO {
+    private String id;
     private String firstNameEmployee;
     private String lastNameEmployee;
     private String description;
     private String requestStatus;
     private Date date;
 
-    public RequestDTO(String firstNameEmployee, String lastNameEmployee, String description, String requestStatus, Date date) {
+    public RequestDTO(String id, String firstNameEmployee, String lastNameEmployee, String description, String requestStatus, Date date) {
+        this.id = id;
         this.firstNameEmployee = firstNameEmployee;
         this.lastNameEmployee = lastNameEmployee;
         this.description = description;
         this.requestStatus = requestStatus;
         this.date = date;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getFirstNameEmployee() {

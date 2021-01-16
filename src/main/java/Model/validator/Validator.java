@@ -4,7 +4,8 @@ import Model.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-public class Validator {
+public class Validator{
+
     public void validateEmployee(Employee employee) throws ValidationException {
         String message="";
         if (employee.getUsername() == null || employee.getUsername().equals("")) {
@@ -67,7 +68,7 @@ public class Validator {
         }
     }
 
-    public void validateContract(Contract contract) {
+    public void validateContract(Contract contract) throws ValidationException {
         String message="";
         if (contract.getUsernameEmployee() == null || contract.getUsernameEmployee().equals("")) {
             message += "Numele de utilizator nu poate fi vid.\n";

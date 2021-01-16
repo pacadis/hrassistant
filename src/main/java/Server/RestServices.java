@@ -83,17 +83,32 @@ public class RestServices {
         return new ResponseEntity<>(employeeAccountDTOList, HttpStatus.OK);
     }
 
-    @GetMapping("/requests")
-    public ResponseEntity<?> getAllRequests(){
+    private List<RequestDTO> getRequests(String companyName){
         List<RequestDTO> requestDTOList = new ArrayList<>();
         requestRepository.findAll()
                 .forEach(request -> {
                     Employee employee = employeeRepository.findOne(request.getUsernameEmployee());
-                    RequestDTO requestDTO = new RequestDTO(employee.getFirstName(), employee.getLastName(),
-                            request.getDescription(), request.getRequestStatus(), request.getDate());
-                    requestDTOList.add(requestDTO);
+                    if(employee.getCompany().equals(companyName)) {
+                        RequestDTO requestDTO = new RequestDTO(request.getId(), employee.getFirstName(), employee.getLastName(),
+                                request.getDescription(), request.getRequestStatus(), request.getDate());
+                        requestDTOList.add(requestDTO);
+                    }
                 });
-        return new ResponseEntity<>(requestDTOList, HttpStatus.OK);
+        return requestDTOList;
+    }
+
+    @GetMapping("/noRequests/{company}")
+    public ResponseEntity<?> getNumberOfPendingRequests(@PathVariable("company") String companyName){
+        int noPending = 0;
+        for(RequestDTO requestDTO: getRequests(companyName)){
+            if(requestDTO.getRequestStatus().equals("PENDING")) noPending++;
+        }
+        return new ResponseEntity<>(noPending, HttpStatus.OK);
+    }
+
+    @GetMapping("/requests/{company}")
+    public ResponseEntity<?> getAllRequests(@PathVariable("company") String companyName){
+        return new ResponseEntity<>(getRequests(companyName), HttpStatus.OK);
     }
 
     @GetMapping("/viewContract/{employeeUsername}")
@@ -186,6 +201,7 @@ public class RestServices {
         if (string.equals(RequestStatus.DECLINE.toString())) {
             Request request = requestRepository.findOne(idRequest);
             request.setRequestStatus(RequestStatus.DECLINE.toString());
+            requestRepository.update(request);
             return new ResponseEntity<>(HttpStatus.OK);
         }
         if (string.equals(RequestStatus.ACCEPT.toString())) {
