@@ -15,6 +15,8 @@ public class Employee {
         this.cnp = cnp;
     }
 
+
+
     public Employee() {
 
     }

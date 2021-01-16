@@ -315,9 +315,19 @@ public class RestServices {
     }
 
     @PutMapping("/employee/{usernameEmployee}")
-    public ResponseEntity<?> updateEmployee(@RequestBody Employee employee, @RequestBody Contract contract, @PathVariable("usernameEmployee") String usernameEmployee) {
-        employee.setId(usernameEmployee);
-        contract.setUsernameEmployee(usernameEmployee);
+    public ResponseEntity<?> updateEmployee(@RequestBody EditEmployeeDTO employeeEdited, @PathVariable("usernameEmployee") String usernameEmployee) {
+        Employee employee = employeeRepository.findOne(employeeEdited.getUsername());
+        Contract contract = contractRepository.findOne(usernameEmployee);
+        employee.setFirstName(employeeEdited.getFirstName());
+        employee.setLastName(employeeEdited.getLastName());
+        employee.setUsername(employeeEdited.getUsername());
+        employee.setPassword(employeeEdited.getPassword());
+        employee.setCnp(employeeEdited.getCnp());
+        contract.setDuration(employeeEdited.getDuration());
+        contract.setHireDate(employeeEdited.getHireDate());
+        contract.setExpirationDate(employeeEdited.getExpirationDate());
+        contract.setGrossSalary(employeeEdited.getGrossSalary());
+        contract.setType(employeeEdited.getType());
         try {
             validator.validateEmployee(employee);
         }catch (ValidationException exception) {

@@ -85,8 +85,8 @@ public class Validator{
         if (contract.getExpirationDate() == null || contract.getExpirationDate().equals("")) {
             message += "Data expirare nu poate fi vida.\n";
         }
-        if (contract.getExpirationDate().after(contract.getHireDate())) {
-            message += "Data de angajare trebuie sa fie dupa date de expirare.\n";
+        if (!contract.getExpirationDate().after(contract.getHireDate())) {
+            message += "Data de angajare trebuie sa fie inainte de data de expirare.\n";
         }
         if (!message.equals("")) {
             throw new ValidationException(message);
