@@ -272,8 +272,7 @@ public class RestServices {
         }
         if (string.equals(RequestStatus.ACCEPT.toString())) {
             boolean ok = acceptRequest(idRequest);
-            if (ok == true)
-                return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
 
         }
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
