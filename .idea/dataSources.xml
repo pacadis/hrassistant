@@ -2,14 +2,27 @@
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
     <data-source source="LOCAL" name="HRAssistant" uuid="06b5838c-00f5-430b-ab80-368397d61f08">
-      <driver-ref>sqlite.xerial</driver-ref>
+      <driver-ref>2e94ba86-2035-4079-8643-a897b2666562</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
       <jdbc-url>jdbc:sqlite:D:\Facultate\Anul III\An 3 - Semestrul I\Proiect Colectiv\hrassistant\HRAssistant.db</jdbc-url>
-      <working-dir>$ProjectFileDir$</working-dir>
       <libraries>
         <library>
           <url>file://$APPLICATION_CONFIG_DIR$/jdbc-drivers/Xerial SQLiteJDBC/3.31.1/sqlite-jdbc-3.31.1.jar</url>
+        </library>
+      </libraries>
+    </data-source>
+    <data-source source="LOCAL" name="HRAssistant [2]" uuid="6403c955-bb92-4f5e-b6c2-7ecbcbf222b2">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:C:\Users\Razvan\Desktop\Facultate\Anul_3\PPD programare paralela si distribuita\hrassistant\HRAssistant.db</jdbc-url>
+      <libraries>
+        <library>
+          <url>file://$APPLICATION_CONFIG_DIR$/jdbc-drivers/Xerial SQLiteJDBC/3.25.1/license.txt</url>
+        </library>
+        <library>
+          <url>file://$APPLICATION_CONFIG_DIR$/jdbc-drivers/Xerial SQLiteJDBC/3.25.1/sqlite-jdbc-3.25.1.jar</url>
         </library>
       </libraries>
     </data-source>

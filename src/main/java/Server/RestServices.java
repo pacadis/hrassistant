@@ -13,10 +13,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import java.io.UnsupportedEncodingException;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @CrossOrigin
@@ -113,6 +114,20 @@ public class RestServices {
         return new ResponseEntity<>(getRequests(companyName), HttpStatus.OK);
     }
 
+    @GetMapping("/employeeRequests/{employee}")
+    public ResponseEntity<?> getEmployeeRequests(@PathVariable("employee") String employeeUsername){
+        List<RequestDTO> requests = new ArrayList<>();
+        requestRepository.findAll().forEach(request -> {
+            if(request.getUsernameEmployee().equals(employeeUsername)) {
+                Employee employee = employeeRepository.findOne(employeeUsername);
+                RequestDTO requestDTO = new RequestDTO(request.getId(), employee.getFirstName(), employee.getLastName(),
+                        request.getDescription(), request.getRequestStatus(), request.getDate());
+                requests.add(requestDTO);
+            }
+        });
+        return new ResponseEntity<>(requests, HttpStatus.OK);
+    }
+
     @GetMapping("/viewContract/{employeeUsername}")
     public ResponseEntity<?> getContract(@PathVariable("employeeUsername") String employeeUsername){
         ContractDTO contractDTO = null;
@@ -176,14 +191,15 @@ public class RestServices {
 
     @GetMapping("/viewHoliday/{employeeUsername}")
     public ResponseEntity<?> getHoliday(@PathVariable("employeeUsername") String employeeUsername){
-        HolidayDTO holidayDTO = null;
-        for (Holiday holiday : holidayRepository.findAll())
+        List<HolidayDTO> holidayDTOList = new ArrayList<>();
+        holidayRepository.findAll().forEach(holiday -> {
+            HolidayDTO holidayDTO = new HolidayDTO();
             if (holiday.getUsernameEmployee().equals(employeeUsername)) {
                 holidayDTO = new HolidayDTO(holiday.getType(), holiday.getFromDate(), holiday.getToDate(), holiday.getProxyUsername());
             }
-        if (holidayDTO == null)
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        return new ResponseEntity<>(holidayDTO, HttpStatus.OK);
+            holidayDTOList.add(holidayDTO);
+        });
+        return new ResponseEntity<>(holidayDTOList, HttpStatus.OK);
     }
 
     @PostMapping("/saveRequest")
@@ -310,7 +326,36 @@ public class RestServices {
     public ResponseEntity<?> saveContact(@RequestBody Contact contact) {
         try{
             validator.validateContact(contact);
-        } catch (ValidationException exception) {
+            final String fromEmail = "office.hrassistant10@gmail.com"; //requires valid gmail id
+            final String password = "proiectcolectiv10"; // correct password for gmail id
+            final String toEmail = contact.getEmail(); // can be any email id
+
+            Properties props = new Properties();
+            props.put("mail.smtp.host", "smtp.gmail.com"); //SMTP Host
+            props.put("mail.smtp.socketFactory.port", "465"); //SSL Port
+            props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory"); //SSL Factory Class
+            props.put("mail.smtp.auth", "true"); //Enabling SMTP Authentication
+            props.put("mail.smtp.port", "465"); //SMTP Port
+
+            Authenticator auth = new Authenticator() {
+                //override the getPasswordAuthentication method
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(fromEmail, password);
+                }
+            };
+
+            MimeMessage msg = new MimeMessage(Session.getDefaultInstance(props, auth));
+            msg.addHeader("Content-type", "text/HTML; charset=UTF-8");
+            msg.addHeader("format", "flowed");
+            msg.addHeader("Content-Transfer-Encoding", "8bit");
+            msg.setFrom(new InternetAddress("no_reply@example.com", "NoReply-JD"));
+            msg.setSubject("Sesizare HRAssistant", "UTF-8");
+            msg.setText("Am primit sesizarea dumneavoastra si vom veni cu un raspuns in cel mai scurt timp\n\n`" + contact.getMessage() + "`\n\nMultumim!", "UTF-8");
+            msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail, false));
+            System.out.println("NO BINEEEEE");
+            Transport.send(msg);
+        } catch (ValidationException | MessagingException | UnsupportedEncodingException exception) {
+            exception.printStackTrace();
             return new ResponseEntity<>(exception.getMessage(), HttpStatus.EXPECTATION_FAILED);
         }
         contactRepository.save(contact);

@@ -8,6 +8,8 @@ public class HolidayDTO {
     private Date toDate;
     private String proxyName;
 
+    public HolidayDTO(){}
+
     public HolidayDTO(String type, Date fromDate, Date toDate, String proxyName) {
         this.type = type;
         this.fromDate = fromDate;
