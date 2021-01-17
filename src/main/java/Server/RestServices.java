@@ -196,6 +196,21 @@ public class RestServices {
             if (holiday.getUsernameEmployee().equals(employeeUsername)) {
                 System.out.println(holiday.getType());
                 HolidayDTO holidayDTO = new HolidayDTO(holiday.getType(), holiday.getFromDate(), holiday.getToDate(), holiday.getProxyUsername());
+                if (holidayDTO.getType().equals("Normal")) {
+                    holidayDTO.setType("Concediu");
+                }
+                if (holidayDTO.getType().equals("BloodDonation")) {
+                    holidayDTO.setType("Concediu pentru donare de sange");
+                }
+                if (holidayDTO.getType().equals("Death")) {
+                    holidayDTO.setType("Concediu pentru inmormantare");
+                }
+                if (holidayDTO.getType().equals("Mariage")) {
+                    holidayDTO.setType("Concediu pentru casatorie");
+                }
+                if (holidayDTO.getType().equals("Overtime")) {
+                    holidayDTO.setType("Concediu din ore suplimentare");
+                }
                 holidayDTOList.add(holidayDTO);
             }
         });
@@ -258,7 +273,8 @@ public class RestServices {
         if (string.equals(RequestStatus.ACCEPT.toString())) {
             boolean ok = acceptRequest(idRequest);
             if (ok == true)
-                return new ResponseEntity<>(HttpStatus.ACCEPTED);
+                return new ResponseEntity<>(HttpStatus.OK);
+
         }
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
@@ -272,16 +288,21 @@ public class RestServices {
             if (holiday.getToDate().getDay() - holiday.getFromDate().getDay() <= holiday.getDaysOff()) {
                 holiday.setDaysOff(holiday.getToDate().getDay() - holiday.getFromDate().getDay());
                 request.setRequestStatus(RequestStatus.ACCEPT.toString());
+                holidayRepository.update(holiday);
+                requestRepository.update(request);
                 return true;
             }
             else {
                 request.setRequestStatus(RequestStatus.DECLINE.toString());
+                requestRepository.update(request);
                 return false;
             }
         }
         if (holiday.getType().equals(HolidayType.BloodDonation.toString()) ||
                 holiday.getType().equals(HolidayType.Death.toString()) || holiday.getType().equals(HolidayType.Mariage.toString())) {
             request.setRequestStatus(RequestStatus.ACCEPT.toString());
+            holidayRepository.update(holiday);
+            requestRepository.update(request);
             return true;
         }
         if (holiday.getType().equals(HolidayType.Overtime.toString())) {
@@ -289,10 +310,13 @@ public class RestServices {
                 if (holiday.getToDate().getDay() - holiday.getFromDate().getDay() * 8<= clocking.getOvertimeHours()) {
                     clocking.setOvertimeHours(clocking.getOvertimeHours() - holiday.getToDate().getDay() - holiday.getFromDate().getDay() * 8);
                     request.setRequestStatus(RequestStatus.ACCEPT.toString());
+                    clockingRepository.update(clocking);
+                    requestRepository.update(request);
                     return true;
                 }
                 else {
                     request.setRequestStatus(RequestStatus.DECLINE.toString());
+                    requestRepository.update(request);
                     return false;
                 }
             }
@@ -300,10 +324,13 @@ public class RestServices {
                 if (holiday.getToDate().getDay() - holiday.getFromDate().getDay() * 6<= clocking.getOvertimeHours()) {
                     clocking.setOvertimeHours(clocking.getOvertimeHours() - holiday.getToDate().getDay() - holiday.getFromDate().getDay() * 4);
                     request.setRequestStatus(RequestStatus.ACCEPT.toString());
+                    clockingRepository.update(clocking);
+                    requestRepository.update(request);
                     return true;
                 }
                 else {
                     request.setRequestStatus(RequestStatus.DECLINE.toString());
+                    requestRepository.update(request);
                     return false;
                 }
             }
@@ -311,10 +338,13 @@ public class RestServices {
                 if (holiday.getToDate().getDay() - holiday.getFromDate().getDay() * 4<= clocking.getOvertimeHours()) {
                     clocking.setOvertimeHours(clocking.getOvertimeHours() - holiday.getToDate().getDay() - holiday.getFromDate().getDay() * 4);
                     request.setRequestStatus(RequestStatus.ACCEPT.toString());
+                    clockingRepository.update(clocking);
+                    requestRepository.update(request);
                     return true;
                 }
                 else {
                     request.setRequestStatus(RequestStatus.DECLINE.toString());
+                    requestRepository.update(request);
                     return false;
                 }
             }

@@ -7,8 +7,8 @@
 <hibernate-mapping>
 
     <class name="Model.Holiday" table="Holiday">
-        <id name="usernameEmployee" column="usernameEmployee"/>
-        <property name="idRequest" column="idRequest"/>
+        <id name="idRequest" column="idRequest"/>
+        <property name="usernameEmployee" column="usernameEmployee"/>
         <property name="daysOff" column="daysOff"/>
         <property name="type" column="type"/>
         <property name="fromDate" type="date" column="fromDate"/>
