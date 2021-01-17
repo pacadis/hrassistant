@@ -9,6 +9,7 @@ public class Payslip {
     private float realizedSalary;
     private float workedHours;
     private float requiredHours;
+    private Integer idPayslip;
 
     public Payslip(String usernameEmployee, String year, String month, float brutSalary,
                    float netSalary, float realizedSalary, int workedHours, int requiredHours) {
@@ -23,6 +24,14 @@ public class Payslip {
     }
 
     public Payslip() {
+    }
+
+    public Integer getIdPayslip() {
+        return idPayslip;
+    }
+
+    public void setIdPayslip(Integer idPayslip) {
+        this.idPayslip = idPayslip;
     }
 
     public String getUsernameEmployee() {

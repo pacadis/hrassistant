@@ -193,11 +193,11 @@ public class RestServices {
     public ResponseEntity<?> getHoliday(@PathVariable("employeeUsername") String employeeUsername){
         List<HolidayDTO> holidayDTOList = new ArrayList<>();
         holidayRepository.findAll().forEach(holiday -> {
-            HolidayDTO holidayDTO = new HolidayDTO();
             if (holiday.getUsernameEmployee().equals(employeeUsername)) {
-                holidayDTO = new HolidayDTO(holiday.getType(), holiday.getFromDate(), holiday.getToDate(), holiday.getProxyUsername());
+                System.out.println(holiday.getType());
+                HolidayDTO holidayDTO = new HolidayDTO(holiday.getType(), holiday.getFromDate(), holiday.getToDate(), holiday.getProxyUsername());
+                holidayDTOList.add(holidayDTO);
             }
-            holidayDTOList.add(holidayDTO);
         });
         return new ResponseEntity<>(holidayDTOList, HttpStatus.OK);
     }

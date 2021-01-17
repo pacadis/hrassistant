@@ -7,8 +7,8 @@
 <hibernate-mapping>
 
     <class name="Model.Clocking" table="Clocking">
-        <id name="usernameEmployee" column="usernameEmployee"/>
-        <property name="idRequest" column="idRequest"/>
+        <id name="idRequest" column="idRequest"/>
+        <property name="usernameEmployee" column="usernameEmployee"/>
         <property name="year" column="year"/>
         <property name="month" column="month"/>
         <property name="day" column="day"/>
