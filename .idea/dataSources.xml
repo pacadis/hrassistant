@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="HRAssistant" uuid="e5ae5a34-c69a-40e8-91e7-a9c13462e79f">
+    <data-source source="LOCAL" name="HRAssistant" uuid="3ecae399-6d52-4a47-b369-98c473d83171">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:D:\Facultate\Anul3\ProiectColectiv\hrassistant\HRAssistant.db</jdbc-url>
+      <jdbc-url>jdbc:sqlite:D:\Facultate\Anul III\An 3 - Semestrul I\Proiect Colectiv\hrassistant\HRAssistant.db</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
       <libraries>
         <library>
-          <url>file://$APPLICATION_CONFIG_DIR$/jdbc-drivers/Xerial SQLiteJDBC/3.31.1/sqlite-jdbc-3.31.1.jar</url>
+          <url>file://$APPLICATION_CONFIG_DIR$/jdbc-drivers/Xerial SQLiteJDBC/3.34.0/sqlite-jdbc-3.34.0.jar</url>
         </library>
       </libraries>
     </data-source>

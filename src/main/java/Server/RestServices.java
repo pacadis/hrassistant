@@ -392,9 +392,13 @@ public class RestServices {
     }
 
     // EmployeeServices
-    @GetMapping("/employee")
-    public ResponseEntity<?> getEmployees() {
-        List<Employee> list = employeeRepository.findAll();
+    @GetMapping("/employeeOfCompany/{companyName}")
+    public ResponseEntity<?> getEmployees(@PathVariable("companyName") String companyName) {
+        List<Employee> list = new ArrayList<>();
+        employeeRepository.findAll().forEach(employee -> {
+            if(employee.getCompany().equals(companyName))
+                list.add(employee);
+        });
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
